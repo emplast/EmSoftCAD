@@ -367,7 +367,7 @@ function onMouseDown(e) {
     }
     if (o) {
         block = true;
-        cyl(e);
+        walec(e);
     }
     if (p) {
         block = true;
@@ -381,11 +381,11 @@ function onMouseDown(e) {
 function onMouseMove(e) {
 
     e.preventDefault();
-    mouse.x = (e.clientX - $('#can').width() / 2) / scale;
-    mouse.y = (-(e.clientY - $('#can').height() / 2)) / scale;
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
     draging(e);
     mousePosition(e);
-
+    render();
     if (l)
         liniaM(e);
     if (k)
@@ -393,7 +393,7 @@ function onMouseMove(e) {
     if (c)
         okregM(e);
     if (o)
-        cylinderM(e);
+        walecM(e);
     if (p)
         szescianM(e);
 }
@@ -412,13 +412,6 @@ function onMouseWheel(e) {
     scaleCanvas(e);
 }
 
-renderer.domElement.addEventListener("mousedown", onMouseDown);
-renderer.domElement.addEventListener("mousemove", onMouseMove);
-renderer.domElement.addEventListener("mouseup", onMouseUp);
-document.addEventListener("keydown", onKeyDown);
-document.addEventListener("wheel", onMouseWheel);
-renderer.domElement.addEventListener('contextmenu', contextmenu, false);
-
 function contextmenu(e) {
 
     if (this.enabled === false) return;
@@ -427,10 +420,153 @@ function contextmenu(e) {
 
 }
 
+
+/*
+*
+*
+*  EVENTY
+*
+*
+*
+*
+*/
+
+renderer.domElement.addEventListener("mousedown", onMouseDown);
+renderer.domElement.addEventListener("mousemove", onMouseMove);
+renderer.domElement.addEventListener("mouseup", onMouseUp);
+document.addEventListener("keydown", onKeyDown);
+document.addEventListener("wheel", onMouseWheel);
+renderer.domElement.addEventListener('contextmenu', contextmenu, false);
+
+//PRZYCISKI
+document.getElementById("pushX").onclick=function(){
+    m++;
+    if (m % 2 != 0) {
+        document.getElementById("pushX").style.backgroundColor="red";
+        document.getElementById("text1").innerHTML="";
+    } else {
+        document.getElementById("pushX").style.backgroundColor="transparent";
+        m = 0;
+        block = false;
+    }
+}
+document.getElementById("pushY").onclick=function(){
+    n++;
+    if (n % 2 != 0) {
+        l = true;
+        if (group_2.children.length > 0) {
+            lineEnd = true;
+        } else {
+            lineEnd = false;
+            block = false;
+        }
+        document.getElementById("pushY").style.backgroundColor="red";
+    } else {
+        l = false;
+        block = false;
+        document.getElementById("pushY").style.backgroundColor="transparent";
+        group_2.remove(group_2.children[group_2.children.length - 1]);
+        lineEnd = false;
+        clickCanvas = 0;
+        endLine.splice(1, endLine.length);
+        n = 0;
+    }
+}
+document.getElementById("pushZ").onclick=function(){
+    n++;
+    if (n % 2 != 0) {
+        k = true;
+        document.getElementById("pushZ").style.backgroundColor="red";
+    } else {
+        k = false;
+        block = false;
+        document.getElementById("pushZ").style.backgroundColor="transparent";
+        clickCanvas = 0;
+        n = 0;
+    }
+}
+document.getElementById("pushA").onclick=function(){
+    n++;
+    if (n % 2 != 0) {
+        c = true;
+        document.getElementById("pushA").style.backgroundColor="red";
+    } else {
+        c = false;
+        block = false;
+        document.getElementById("pushA").style.backgroundColor="transparent";
+        clickCanvas = 0;
+        n = 0;
+    }
+}
+document.getElementById("pushG").onclick=function(){
+    alert("Kliknełeś na #pushG");
+}
+document.getElementById("pushC").onclick=function(){
+    alert("Kliknełeś na #pushC");
+}
+document.getElementById("pushD").onclick=function(){
+    $('#cylinder').fadeToggle();
+    n = -1;
+    $('#cylinderA').click();
+    n = -1;
+    $('#cylinderB').click();
+}
+document.getElementById("cylinderA").onclick=function(){
+    n++;
+    if (n % 2 != 0) {
+        o = true;
+        f = 1;
+        document.getElementById("cylinderA").style.backgroundColor="red";
+    } else {
+        o = false;
+        block = false;
+        document.getElementById("cylinderA").style.backgroundColor="transparent";
+        n = 0;
+    }
+}
+document.getElementById("cylinderB").onclick=function(){
+    n++;
+    if (n % 2 != 0) {
+        o = true;
+        f = 0;
+        document.getElementById("cylinderB").style.backgroundColor="red";
+    } else {
+        o = false;
+        block = false;
+        document.getElementById("cylinderB").style.backgroundColor="transparent";
+        n = 0;
+    }
+}
+document.getElementById("pushE").onclick=function(){
+    n++;
+    if (n % 2 != 0) {
+        p = true;
+        document.getElementById("pushE").style.backgroundColor="red";
+    } else {
+        p = false;
+        block = false;
+        document.getElementById("pushE").style.backgroundColor="transparent";
+        clickCanvas = 0;
+        n = 0;
+    }
+}
+document.getElementById("pushF").onclick=function(){
+    n++;
+    if (n % 2 != 0) {
+        x = true;
+        document.getElementById("pushF").style.backgroundColor="red";
+    } else {
+        x = false;
+        document.getElementById("pushF").style.backgroundColor="transparent";
+        clickCanvas = 0;
+        n = 0;
+    }
+}
+
 function planeColor(e) {
 
-    mouse.x = ((e.clientX) / $('#can').width()) * 2 - 1;
-    mouse.y = -((e.clientY) / $('#can').height()) * 2 + 1;
+    mouse.x = ((e.clientX) / document.getElementById("can").width) * 2 - 1;
+    mouse.y = -((e.clientY) / document.getElementById("can").height) * 2 + 1;
     raycaster.setFromCamera(mouse, camera);
     var inter = raycaster.intersectObjects(p_o);
     if (inter.length > 0) {
@@ -569,8 +705,8 @@ function mousePosition(e) {
 
 function linia(e) {
 
-    mouse.x = (e.clientX - $('#can').width() / 2) / scale;
-    mouse.y = (-(e.clientY - $('#can').height() / 2)) / scale;
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
 
 
     var geometryLine = new THREE.Geometry();
@@ -643,19 +779,16 @@ function linia(e) {
 
 function kwadrat(e) {
 
-    mouse.x = (e.clientX - $('#can').width() / 2) / scale;
-    mouse.y = (-(e.clientY - $('#can').height() / 2)) / scale;
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
 
-    var material = new THREE.LineBasicMaterial({
-        color: 0x050505
-    });
-    var geometry = new THREE.Geometry();
+
     switch (clickCanvas) {
         case 0:
             a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
             break;
         default:
-            clickCanvas = 0;
+            a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
             break;
     }
     clickCanvas++;
@@ -668,8 +801,8 @@ function kwadrat(e) {
 
 function okreg(e) {
 
-    mouse.x = (e.clientX - $('#can').width() / 2) / scale;
-    mouse.y = (-(e.clientY - $('#can').height() / 2)) / scale;
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
 
     switch (clickCanvas) {
         case 0:
@@ -677,10 +810,8 @@ function okreg(e) {
             pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
             break;
         default:
-
             pozycja[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
             pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
-            clickCanvas = 0;
             break;
     }
     clickCanvas++;
@@ -692,70 +823,16 @@ function okreg(e) {
     render();
 }
 
-function cyl(e) {
-    mouse.x = (e.clientX - $('#can').width() / 2) / scale;
-    mouse.y = (-(e.clientY - $('#can').height() / 2)) / scale;
+function walec(e) {
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
 
     switch (clickCanvas) {
         case 0:
             pozycja[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z));
-
+            pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z,"ZYX"));
             break;
-        case 1:
-            // var material = new THREE.LineBasicMaterial({
-            //     color: 0x050505
-            // });
-            // segments = 32;
-            // srednica = new THREE.Vector3(mouse.x, mouse.y, 0);
-            // radius_1 = srednica.distanceTo(pozycja[1]);
-            // geometry = new THREE.CircleGeometry(radius_1, segments, 0, 6.3),
-            //     geometry.vertices.shift();
-            // circle = new THREE.Line(geometry, material),
-            //     circle.quaternion.set(quaternionBlock._x, quaternionBlock._y, quaternionBlock._z, quaternionBlock._w);
-            // circle.position.set(pozycja[1].x, pozycja[1].y, 0);
-            // circle.rotateZ(-group_1.rotation._z);
-            // circle.rotateY(-group_1.rotation._y);
-            // circle.rotateX(-group_1.rotation._x);
-            // //circle.setRotationFromMatrix(group_1.matrixWorld);
-            // circle.name = 'Circle';
-            // for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-            //     group_2.remove(group_2.children[i])
-            // }
-            // group_2.add(circle);
-            break;
-        case 2:
-            // segments = 32;
-            // dlugosc[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            // // dlugosc[1].applyEuler(new THREE.Euler((-group_1.rotation._x+toRadians(90)),-group_1.rotation._y,-group_1.rotation._z));
-            // var height = dlugosc[1].distanceTo(pozycja[1]);
-            // var geometry = new THREE.CylinderGeometry(radius_1, radius_1, height, segments, 2, false, 0, Math.PI * 2, f);
-            // var material = new THREE.MeshPhongMaterial({
-            //     color: 0x4d4e4f
-            // });
-            // var cylinder = new THREE.Mesh(geometry, material);
-            // for (var i = 0; i < group_2.children.length; i++) {
-            //     if (group_2.children[i].name == 'Circle') {
-            //         group_2.remove(group_2.children[i]);
-            //     }
-            // }
-            // // cylinder.rotateZ(-group_1.rotation._z);
-            // // cylinder.rotateY(-group_1.rotation._y);
-            // // cylinder.rotateX(-group_1.rotation._x - toRadians(90));
-            // // cylinder.setRotationFromEuler(new THREE.Euler(-group_1.rotation._x,-group_1.rotation._y,-group_1.rotation._z,"XYZ"));
-            // cylinder.rotateX(toRadians(90));
-            // cylinder.applyQuaternion(group_1.quaternion);
-            // cylinder.position.set(pozycja[1].x, pozycja[1].y, pozycja[1].z);
-            // for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-            //     group_2.remove(group_2.children[i])
-            // }
-            // group_2.add(cylinder);
-            break;
-        default:
-            pozycja[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z));
-            clickCanvas = 0;
-            break;
+        
     }
     clickCanvas++;
     objects.splice(7 + g_2El, objects.length);
@@ -768,62 +845,11 @@ function cyl(e) {
 
 function szescian(e) {
 
-    mouse.x = (e.clientX - $('#can').width() / 2) / scale;
-    mouse.y = (-(e.clientY - $('#can').height() / 2)) / scale;
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
 
     switch (clickCanvas) {
         case 0:
-            a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            break;
-        case 1:
-            // var material = new THREE.LineBasicMaterial({
-            //     color: 0x050505
-            // });
-            // var geometry = new THREE.Geometry();
-            // a[3] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            // a[2] = new THREE.Vector3(a[1].x, a[3].y, 0);
-            // a[4] = new THREE.Vector3(a[3].x, a[1].y, 0);
-            // a[5] = new THREE.Vector3(a[1].x, a[1].y, 0);
-            // geometry.vertices.push(a[1], a[2], a[3], a[4], a[5]);
-            // var box = new THREE.Line(geometry, material);
-            // box.name = 'Box_' + g_2El;
-            // box.quaternion.set(quaternionBlock._x, quaternionBlock._y, quaternionBlock._z, quaternionBlock._w);
-            // box.position.set(a[1].x, a[1].y, 0);
-            // box.rotateZ(-group_1.rotation._z);
-            // box.rotateY(-group_1.rotation._y);
-            // box.rotateX(-group_1.rotation._x);
-            for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-                group_2.remove(group_2.children[i])
-            }
-            // group_2.add(box);
-            break;
-        case 2:
-            for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-                group_2.remove(group_2.children[i])
-            }
-            var width = a[2].distanceTo(a[3]);
-            var height = a[1].distanceTo(a[2]);
-            var geometry = new THREE.BoxGeometry(width, height, a[1].distanceTo(new THREE.Vector3(mouse.x, mouse.y, 0)), 2, 2, 2, 'b');
-            var material = new THREE.MeshPhongMaterial({
-                color: 0x4d4e4f
-            });
-            var cube = new THREE.Mesh(geometry, material);
-            cube.name = 'Box_' + g_2El;
-            //cube.quaternion.set(quaternionBlock._x, quaternionBlock._y, quaternionBlock._z, quaternionBlock._w);
-
-            cube.rotateZ(-group_1.rotation._z);
-            cube.rotateY(-group_1.rotation._y);
-            cube.rotateX(-group_1.rotation._x);
-            cube.position.set(a[1].x, a[1].y, 0);
-            group_2.add(cube);
-            $('#text').append('<p style="font-size:10px;margin-left:25px;color:black;">' + '-  ' + cube.name + '</p>');
-            if ($('#text').height() > 300) {
-                text2.style.height = '300px';
-                text2.style.overflowY = "scroll";
-            }
-            break;
-        default:
-            clickCanvas = 0;
             a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
             break;
     }
@@ -834,13 +860,13 @@ function szescian(e) {
     }
     g_2El = group_2.children.length;
 
-
+    render();
 }
 
 function liniaM(e) {
 
-    mouse.x = (e.clientX - $('#can').width() / 2) / scale;
-    mouse.y = (-(e.clientY - $('#can').height() / 2)) / scale;
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
 
     var geometry = new THREE.Geometry();
     var material = new THREE.LineBasicMaterial({
@@ -896,8 +922,8 @@ function liniaM(e) {
 
 function kwadratM(e) {
 
-    mouse.x = (e.clientX - $('#can').width() / 2) / scale;
-    mouse.y = (-(e.clientY - $('#can').height() / 2)) / scale;
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
 
 
     var material = new THREE.LineBasicMaterial({
@@ -905,9 +931,7 @@ function kwadratM(e) {
     });
     var geometry = new THREE.Geometry();
     switch (clickCanvas) {
-        case 0:
-            a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            break;
+
         case 1:
             a[3] = new THREE.Vector3(mouse.x, mouse.y, 0);
             a[2] = new THREE.Vector3(a[1].x, a[3].y, 0);
@@ -924,8 +948,8 @@ function kwadratM(e) {
             group_2.add(box);
             break;
         default:
-            clickCanvas = 0;
             a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+            clickCanvas = 0;
             break;
     }
     render();
@@ -933,8 +957,8 @@ function kwadratM(e) {
 
 function okregM(e) {
 
-    mouse.x = (e.clientX - $('#can').width() / 2) / scale;
-    mouse.y = (-(e.clientY - $('#can').height() / 2)) / scale;
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
 
     switch (clickCanvas) {
         case 0:
@@ -962,7 +986,7 @@ function okregM(e) {
             break;
         default:
             p[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z,"ZYX"));
+            pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
             clickCanvas = 0;
             break;
     }
@@ -970,31 +994,27 @@ function okregM(e) {
 
 }
 
-function cylinderM(e) {
+function walecM(e) {
 
-    mouse.x = (e.clientX - $('#can').width() / 2) / scale;
-    mouse.y = (-(e.clientY - $('#can').height() / 2)) / scale;
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
 
     switch (clickCanvas) {
-        case 0:
-            pozycja[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z));
-
-            break;
         case 1:
             var material = new THREE.LineBasicMaterial({
                 color: 0x050505
             });
             segments = 32;
             srednica = new THREE.Vector3(mouse.x, mouse.y, 0);
-            srednica.applyEuler(new THREE.Euler(group_1.rotation._x, group_1.rotation._y, group_1.rotation._z));
-            // radius_1 = srednica.distanceTo(pozycja[1]);
-            radius_1 = Math.sqrt((Math.pow((Number(srednica.x) - Number(pozycja[1].x)), 2) + Math.pow((Number(srednica.y) - Number(pozycja[1].y)), 2))).toFixed(2);
+            srednica.applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y,-group_1.rotation._z,"ZYX"));
+            radius_1 = srednica.distanceTo(pozycja[1]);
             geometry = new THREE.CircleGeometry(radius_1, segments, 0, (Math.PI * 2).toFixed(2)),
-                geometry.vertices.shift();
+            geometry.vertices.shift();
             circle = new THREE.Line(geometry, material),
-                circle.setRotationFromEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z))
             circle.position.set(pozycja[1].x, pozycja[1].y, pozycja[1].z);
+            circle.rotateZ(-group_1.rotation._z);
+            circle.rotateY(-group_1.rotation._y);
+            circle.rotateX(-group_1.rotation._x);
             circle.name = 'Circle';
             for (var i = 0 + g_2El; i < group_2.children.length; i++) {
                 group_2.remove(group_2.children[i])
@@ -1005,26 +1025,17 @@ function cylinderM(e) {
 
             segments = 32;
             dlugosc[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            // dlugosc[1].applyEuler(new THREE.Euler((-group_1.rotation._x+toRadians(90)),-group_1.rotation._y,-group_1.rotation._z));
             var height = dlugosc[1].distanceTo(pozycja[1]);
             var geometry = new THREE.CylinderGeometry(radius_1, radius_1, height, segments, 2, false, 0, Math.PI * 2, f);
             var material = new THREE.MeshPhongMaterial({
                 color: 0x4d4e4f
             });
             var cylinder = new THREE.Mesh(geometry, material);
-            for (var i = 0; i < group_2.children.length; i++) {
-                if (group_2.children[i].name == 'Circle') {
-                    group_2.remove(group_2.children[i]);
-                }
-            }
-            // cylinder.rotateZ(-group_1.rotation._z);
-            // cylinder.rotateY(-group_1.rotation._y);
-            // cylinder.rotateX(-group_1.rotation._x - toRadians(90));
-            // cylinder.setRotationFromEuler(new THREE.Euler(-group_1.rotation._x,-group_1.rotation._y,-group_1.rotation._z,"XYZ"));
-            cylinder.rotateX(toRadians(90));
-            cylinder.applyQuaternion(group_1.quaternion);
-
             cylinder.position.set(pozycja[1].x, pozycja[1].y, pozycja[1].z);
+            cylinder.rotateZ(-group_1.rotation._z);
+            cylinder.rotateY(-group_1.rotation._y);
+            cylinder.rotateX(-group_1.rotation._x -toRadians(90));
+            cylinder.name = 'Walec';
             for (var i = 0 + g_2El; i < group_2.children.length; i++) {
                 group_2.remove(group_2.children[i])
             }
@@ -1039,63 +1050,65 @@ function cylinderM(e) {
 
 function szescianM(e) {
 
-    mouse.x = (e.clientX - $('#can').width() / 2) / scale;
-    mouse.y = (-(e.clientY - $('#can').height() / 2)) / scale;
-
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
+    var geometry = new THREE.Geometry();
+    var material = new THREE.LineBasicMaterial({
+        color: 0x050505
+    });
     switch (clickCanvas) {
-        case 0:
-            a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
 
-            break;
         case 1:
-            var geometry = new THREE.Geometry();
-            var material = new THREE.LineBasicMaterial({
-                color: 0x050505
-            });
 
             a[3] = new THREE.Vector3(mouse.x, mouse.y, 0);
             a[2] = new THREE.Vector3(a[1].x, a[3].y, 0);
             a[4] = new THREE.Vector3(a[3].x, a[1].y, 0);
             a[5] = new THREE.Vector3(a[1].x, a[1].y, 0);
             geometry.vertices.push(a[1], a[2], a[3], a[4], a[5]);
-            var line = new THREE.Line(geometry, material);
-            // box.quaternion.set(quaternionBlock._x, quaternionBlock._y, quaternionBlock._z, quaternionBlock._z);
-            line.name = 'Box_' + g_2El;
+            var box = new THREE.Line(geometry, material);
+            box.name = 'Box_' + g_2El;
+            box.rotateZ(-group_1.rotation._z);
+            box.rotateY(-group_1.rotation._y);
+            box.rotateX(-group_1.rotation._x);
 
-            line.rotateZ(-group_1.rotation._z);
-            line.rotateY(-group_1.rotation._y);
-            line.rotateX(-group_1.rotation._x);
-            line.position.set(a[1].x, a[1].y, 0);
             for (var i = 0 + g_2El; i < group_2.children.length; i++) {
                 group_2.remove(group_2.children[i])
             }
-            group_2.add(line);
+            group_2.add(box);
             break;
         case 2:
-            for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-                group_2.remove(group_2.children[i])
-            }
-            var width = a[2].distanceTo(a[3]);
-            var height = a[1].distanceTo(a[2])
-            var geometry = new THREE.BoxGeometry(width, height, a[1].distanceTo(new THREE.Vector3(mouse.x, mouse.y, 0)), 2, 2, 2, 'b');
-
-            var material = new THREE.MeshPhongMaterial({
+            a[6] = new THREE.Vector3(mouse.x, mouse.y, 0);
+            // var width = a[2].distanceTo(a[3]);
+            // var height = a[1].distanceTo(a[2]);
+            // var depth = a[1].distanceTo(a[6]);
+            var width = a[3].x - a[1].x;
+            var height = a[3].y - a[1].y;
+            var depth = a[1].x - a[6].y;
+            geometry = new THREE.BoxGeometry(width, height, depth, 2, 2, 2, 'b');
+            material = new THREE.MeshPhongMaterial({
                 color: 0x4d4e4f
             });
             var cube = new THREE.Mesh(geometry, material);
-            // cube.quaternion.set(quaternionBlock._x, quaternionBlock._y, quaternionBlock._z, quaternionBlock._w);
-
+            var vec = new THREE.Vector3(a[1].x, a[1].y, 0);
+            vec.applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
+            cube.position.set(vec.x, vec.y, vec.z);
             cube.rotateZ(-group_1.rotation._z);
             cube.rotateY(-group_1.rotation._y);
             cube.rotateX(-group_1.rotation._x);
-            cube.position.set(a[1].x, a[1].y, 0);
+            cube.name = 'Cube_' + g_2El;
+
+            for (var i = 0 + g_2El; i < group_2.children.length; i++) {
+                group_2.remove(group_2.children[i])
+            }
             group_2.add(cube);
             break;
         default:
+            a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
             clickCanvas = 0;
-            // a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
             break;
+
     }
+    render();
 
 }
 
@@ -1122,194 +1135,7 @@ function isRoot(euler) {
     // console.log(group.quaternion.multiplyQuaternions(euler,group.quaternion));
 
 }
-//przyciski
-$(function () {
 
-
-    $('#pushX').on('click', function () {
-        m++;
-        if (m % 2 != 0) {
-            $('#pushX').css('background', 'red');
-            $('#text1').val("");
-
-        } else {
-            $('#pushX').css('background', 'transparent');
-            m = 0;
-            block = false;
-        }
-
-    });
-    $('#pushY').on('click', function () {
-        n++;
-        if (n % 2 != 0) {
-            l = true;
-            if (group_2.children.length > 0) {
-                lineEnd = true;
-            } else {
-                lineEnd = false;
-                block = false;
-            }
-            $('#pushY').css('background', 'red');
-
-        } else {
-            l = false;
-            block = false;
-            $('#pushY').css('background', 'transparent');
-            group_2.remove(group_2.children[group_2.children.length - 1]);
-            lineEnd = false;
-            clickCanvas = 0;
-            endLine.splice(1, endLine.length);
-            n = 0;
-        }
-    });
-    $('#pushZ').on('click', function () {
-        n++;
-        if (n % 2 != 0) {
-            k = true;
-            $('#pushZ').css('background', 'red');
-        } else {
-            k = false;
-            block = false;
-            $('#pushZ').css('background', 'transparent');
-            clickCanvas = 0;
-            n = 0;
-        }
-    });
-    $('#pushA').on('click', function () {
-        n++;
-        if (n % 2 != 0) {
-            c = true;
-            $('#pushA').css('background', 'red');
-        } else {
-            c = false;
-            block = false;
-            $('#pushA').css('background', 'transparent');
-            clickCanvas = 0;
-            n = 0;
-        }
-    });
-    $('#pushX1').on('click', function () {
-        $("#text_z").fadeToggle();
-        var kat = $('#text_z1').val();
-        var kat1 = $('#text_z2').val();
-        var kat2 = $('#text_z3').val();
-        // group.setRotationFromEuler(new THREE.Euler(toRadians(kat), toRadians(kat1), toRadians(kat2), 'XYZ'));
-        // group_1.setRotationFromEuler(new THREE.Euler(toRadians(kat), toRadians(kat1), toRadians(kat2), 'XYZ'));
-        // group_2.setRotationFromEuler(new THREE.Euler(toRadians(kat), toRadians(kat1), toRadians(kat2), 'XYZ'));
-
-    });
-    $('#pushG').on('click', function () {
-
-    });
-    $('#pushC').on('click', function () {
-        // group_2.setRotationFromEuler(new THREE.Euler(toRadians(-30),toRadians(0),toRadians(0), 'XYZ'));//x+30;y-30
-        // group_2.rotateX(toRadians(90));
-        group_2.rotateY(toRadians(-30));
-    });
-    $('#pushD').on('click', function () {
-        $('#cylinder').fadeToggle();
-        n = -1;
-        $('#cylinderA').click();
-        n = -1;
-        $('#cylinderB').click();
-    });
-    $('#cylinderA').on('click', function () {
-        n++;
-        if (n % 2 != 0) {
-            o = true;
-            f = 1;
-            $('#cylinderA').css('background', 'red');
-        } else {
-            o = false;
-            block = false;
-            $('#cylinderA').css('background', 'transparent');
-            n = 0;
-        }
-    });
-    $('#cylinderB').on('click', function () {
-        n++;
-        if (n % 2 != 0) {
-            o = true;
-            f = 0;
-            $('#cylinderB').css('background-color', 'red');
-        } else {
-            o = false;
-            block = false;
-            $('#cylinderB').css('background', 'transparent');
-            n = 0;
-        }
-    });
-    $('#pushE').on('click', function () {
-        n++;
-        if (n % 2 != 0) {
-            p = true;
-            $('#pushE').css('background', 'red');
-        } else {
-            p = false;
-            block = false;
-            $('#pushE').css('background', 'transparent');
-            clickCanvas = 0;
-            n = 0;
-        }
-    });
-    $('#pushF').on('click', function () {
-        /*
-         var material = new THREE.MeshStandardMaterial( { color : 0x00cc00 } );
-         
-         //create a triangular geometry
-         var geometry = new THREE.Geometry();
-         var width=50,
-         height=50,
-         depth=50,
-         heightSegment=1,
-         depthSegment=1,
-         couterBox=0,
-         vector=new THREE.Vector3();
-         geometry.vertices.push( new THREE.Vector3( 0,0, 0 ) );
-         geometry.vertices.push( new THREE.Vector3(  width,0, 0 ) );
-         geometry.vertices.push( new THREE.Vector3(  width,height, 0 ) );
-         geometry.vertices.push( new THREE.Vector3(0,  height, 0 ) );
-         geometry.vertices.push(new THREE.Vector3(0,height,-depth ));
-         geometry.vertices.push(new THREE.Vector3(0,0,-depth ));
-         
-         //create a new face using vertices 0, 1, 2
-         var normal = new THREE.Vector3( 0, 0, 1 ); //optional
-         var color = new THREE.Color( 0xffaa00 ); //optional
-         var materialIndex = 0; //optional
-         var face = new THREE.Face3( 0, 1, 2 );
-         var face1 = new THREE.Face3(2,3,0);
-         var face2= new THREE.Face3(0,3,4);
-         var face3= new THREE.Face3(0,4,5);
-         //add the face to the geometry's faces array
-         geometry.faces.push( face,face1,face2,face3 );
-         //console.log(geometry.faces);
-         //the face normals and vertex normals can be calculated automatically if not supplied above
-         //geometry.computeFaceNormals();
-         //geometry.computeVertexNormals();
-         
-         
-         
-         
-         
-         group_2.add( new THREE.Mesh( geometry, material ) );*/
-        //box('x', 'y', 'z', 1, 70, 50, 50, 2, 2, 2); //front
-        //box('y', 'x', 'z', 1, 50, 70, 0, 2, 2, 2); //beck
-        // box('z', 'x', 'y', 1, 50, 70, 50, 2, 2, 2); //top
-        // box('x', 'z', 'y', 1, 70, 50, 0, 2, 2, 2); //bootom
-        // box('y', 'z', 'x', 1, 50, 50, 70, 2, 2, 2); //left
-        // box('z', 'y', 'x', 1, 50, 50, 0, 2, 2, 2); //right*/
-        n++;
-        if (n % 2 != 0) {
-            x = true;
-            $('#pushF').css('background', 'red');
-        } else {
-            x = false;
-            $('#pushF').css('background', 'transparent');
-            clickCanvas = 0;
-            n = 0;
-        }
-    });
-});
 
 function box_1(u, v, w, dir, width, height, depth, widthSegment, heightSegment, depthSegment, materialIndex = 0x00cc00) {
     var material = new THREE.MeshPhongMaterial({
@@ -1364,23 +1190,11 @@ function box_1(u, v, w, dir, width, height, depth, widthSegment, heightSegment, 
 }
 
 
-// window.requestAnimFrame = (function () {
-//     return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
-//         window.setTimeout(callback, 1000 / 60);
-//     };
-// })();
+
 var lastFrameTime = new Date().getTime() / 1000;
 var totalGameTime = 0;
 
-// function update(dt, t) {
-//     setTimeout(function () {
-//         var currTime = new Date().getTime() / 1000;
-//         var dt = currTime - (lastFrameTime || currTime);
-//         totalGameTime += dt;
-//         update(dt, totalGameTime);
-//         lastFrameTime = currTime;
-//     }, 0);
-// }
+
 
 function render() {
     camera.lookAt(scene.position);
@@ -1390,42 +1204,30 @@ function render() {
     var intersects = raycaster.intersectObjects(objects);
     if (intersects.length > 0) {
         toRotate(intersects, block);
-        if (l == false) {
-            $(function () {
-                $('#pLine').text('Objekt o nazwie: ' + intersects[0].object.name);
-                $('#pLine').css('color', 'red');
-
-
-            });
-
-            $(document).on('keydown', function (e) {
-                if (e.which == 46) {
-                    group_2.remove(intersects[0].object);
-                    objects.splice(7, objects.length);
-                    for (var i = 0; i < group_2.children.length; i++) {
-                        if (group_2.children[i] != objects[i + 7]) {
-                            objects.push(group_2.children[i]);
-                        }
-                    }
-                }
-            });
-        }
+       
+            document.getElementById("pLine").innerHTML = 'Objekt o nazwie: ' + intersects[0].object.name;
+            document.getElementById("pLine").style.color = "red";
+            // document.onKeyDown = function (e) {
+            //     if (e.which == 46) {
+            //         group_2.remove(intersects[0].object);
+            //         objects.splice(7, objects.length);
+            //         for (var i = 0; i < group_2.children.length; i++) {
+            //             if (group_2.children[i] != objects[i + 7]) {
+            //                 objects.push(group_2.children[i]);
+            //             };
+            //         };
+            //     };
+            // };
+        
 
     } else {
-        $(function () {
-            $('#pLine').text('Brak zaznaczonych obiektow');
-            $('#pLine').css('color', 'black');
-        });
+        document.getElementById("pLine").innerHTML = "Brak zaznaczonych obiektow";
+        document.getElementById("pLine").style.color = "black";
     }
 
-
-
-
-
-
     renderer.render(scene, camera);
-    // requestAnimFrame(render);
 }
+
 function animate() {
     requestAnimationFrame(animate);
     render();
@@ -1439,10 +1241,10 @@ function toRotate(intersects, block) {
         intersects[0].object.name == 'plane6' && block == false) {
         qua.setFromEuler(new THREE.Euler(0, 0, 0));
         if (group_1.quaternion != qua) {
-            // group_2.quaternion.set(qua._x, qua._y, qua._z, qua._w);
-            // group_1.quaternion.set(qua._x, qua._y, qua._z, qua._w);
-            // group.quaternion.set(qua._x, qua._y, qua._z, qua._w);
-            isRoot(qua);
+            group_2.quaternion.set(qua._x, qua._y, qua._z, qua._w);
+            group_1.quaternion.set(qua._x, qua._y, qua._z, qua._w);
+            group.quaternion.set(qua._x, qua._y, qua._z, qua._w);
+            // isRoot(qua);
 
 
         }
@@ -1478,10 +1280,10 @@ function toRotate(intersects, block) {
         intersects[0].object.name == 'plane8' && block == false) {
         qua.setFromEuler(new THREE.Euler(Math.PI / 2, 0, 0));
         if (group_1.quaternion != qua) {
-            // group_2.quaternion.set(qua._x, qua._y, qua._z, qua._w);
-            // group_1.quaternion.set(qua._x, qua._y, qua._z, qua._w);
-            // group.quaternion.set(qua._x, qua._y, qua._z, qua._w);
-            isRoot(qua);
+            group_2.quaternion.set(qua._x, qua._y, qua._z, qua._w);
+            group_1.quaternion.set(qua._x, qua._y, qua._z, qua._w);
+            group.quaternion.set(qua._x, qua._y, qua._z, qua._w);
+            // isRoot(qua);
         }
     }
     if (intersects[0].object.name == 'bottom' && block == false) {
