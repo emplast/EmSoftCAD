@@ -1,0 +1,36 @@
+
+
+#divP{
+    
+   float: right;
+    /*width: 246px;
+    height: 100%;*/
+    border: 2px solid #edeff2
+}
+#pushX,
+#pushX1,
+#pushY,
+#pushZ,
+#pushA,
+#pushB,
+#pushC,
+#pushD,
+#pushE,
+#pushF,
+#pushG,
+#cylinderA,
+#cylinderB{
+    margin-left: 10px;
+    margin-top:  10px;
+    
+}
+#hrFooter{
+    background-color:  #edeff2;
+}
+#pFooter{
+    text-align: center;
+    font-size: 10px;
+}
+#footer{
+    margin-top:100%;
+}
