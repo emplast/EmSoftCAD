@@ -11,6 +11,8 @@
  * 
  */
 
+// nie ruszć nic nie dopisywać
+
 var isDragging = false;
 var previousMousePosition = {
     x: 0,
@@ -28,6 +30,7 @@ var group_1 = new THREE.Group();
 var group_2 = new THREE.Group();
 var loader = new THREE.FontLoader();
 var lineEnd = false;
+var eulerBlock;
 var m = 0;
 var n = 0;
 var f = 0;
@@ -44,6 +47,8 @@ var g_2El = 0;
 var startLine = new THREE.Vector3();
 var endLine = [new THREE.Vector3()];
 var endLineK = new THREE.Vector3();
+var menuScetch = document.getElementById("menuScetch");
+var menuScetchOK = true;
 var quaternionBlock = new THREE.Quaternion();
 var container = document.createElement("div");
 document.body.appendChild(container);
@@ -80,20 +85,20 @@ icon.style.left = 50 + 'px';
 icon.style.top = 20 + 'px';
 document.body.appendChild(icon);
 icon.setAttribute('id', 'icon');
-$('#icon').append('<img  id="pushY" src="icon/Part_Line_Parametric.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2;" width="25"height="25">');
-$('#icon').append('<img height="25" id="pushZ" src="icon/Draft_Rectangle.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
-$('#icon').append('<img height="25" id="pushA" src="icon/Part_Circle_Parametric.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">')
-$('#icon').append('<img height="25" id="pushB" src="icon/Draft_Polygon.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
-$('#icon').append('<img height="25" id="pushC" src="icon/Draft_Point.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25"></br></br>');
+$('#icon').append('<img  id="pushY" title="Kreślenie lini" src="icon/Part_Line_Parametric.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2;" width="25"height="25">');
+$('#icon').append('<img height="25" id="pushZ" title="Kreślenie kwadratu" src="icon/Draft_Rectangle.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
+$('#icon').append('<img height="25" id="pushA" title="Kreślenie koła" src="icon/Part_Circle_Parametric.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">')
+$('#icon').append('<img height="25" id="pushB" title="Puste" src="icon/Draft_Polygon.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
+$('#icon').append('<img height="25" id="pushC" title="Puste" src="icon/Draft_Point.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25"></br></br>');
 // </br>
-$('#icon').append('<img height="25" id="pushX" src="icon/Sketcher_External.png" style="float:left;margin-left: 10px;border: 0.5px solid #edeff2" width="25">');
-$('#icon').append('<img height="25" id="pushD" src="icon/Part_Cylinder.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
+$('#icon').append('<img height="25" id="pushX" title="Puste" src="icon/Sketcher_External.png" style="float:left;margin-left: 10px;border: 0.5px solid #edeff2" width="25">');
+$('#icon').append('<img height="25" id="pushD" title="Kreślenie walca" src="icon/Part_Cylinder.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
 $('#icon').append('<div id="cylinder" style="display:none"></div>');
 $('#cylinder').append('<img height="30" id="cylinderA" src="icon/Fem-2D-1.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="30"></img>');
 $('#cylinder').append('<img height="30" id="cylinderB" src="icon/Fem-2D.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="30"></img>');
-$('#icon').append('<img height="25" id="pushE" src="icon/Part_Workbench.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
-$('#icon').append('<img height="25" id="pushF" src="icon/Part_Extrude.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
-$('#icon').append('<img height="25" id="pushG" src="icon/if_info_blue_40801.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
+$('#icon').append('<img height="25" id="pushE" title="Kreślenie sześcianu" src="icon/Part_Workbench.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
+$('#icon').append('<img height="25" id="pushF" title="Blokowanie płaszczyzny kreślenia" src="icon/Part_Extrude.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
+$('#icon').append('<img height="25" id="pushG" title="Puste" src="icon/if_info_blue_40801.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
 var footer = document.createElement('div');
 footer.style.position = 'absolute';
 footer.setAttribute('id', 'footer');
@@ -181,18 +186,21 @@ plane5.name = 'top';
 var material1 = new THREE.LineBasicMaterial({
     color: 0x050505
 });
+
+//płaszczyzny czarne
 var geometryP4 = new THREE.PlaneGeometry(250, 250, 250);
-var materialP4 = new THREE.MeshBasicMaterial({ color: 0x272828, transparent: true, opacity: 0.25, side: THREE.DoubleSide, vertexColors: THREE.FaceColors });
+var materialP4 = new THREE.MeshBasicMaterial({ color: 0xedeff2, transparent: true, opacity: 0.25, side: THREE.DoubleSide, vertexColors: THREE.FaceColors });
 var plane6 = new THREE.Mesh(geometryP4, materialP4);
 plane6.name = "plane6";
 var geometryP5 = new THREE.PlaneGeometry(250, 250, 250);
-var materialP5 = new THREE.MeshPhongMaterial({ color: 0x272828, transparent: true, opacity: 0.25, side: THREE.DoubleSide, vertexColors: THREE.FaceColors });
+var materialP5 = new THREE.MeshPhongMaterial({ color: 0xedeff2, transparent: true, opacity: 0.25, side: THREE.DoubleSide, vertexColors: THREE.FaceColors });
 var plane7 = new THREE.Mesh(geometryP5, materialP5);
 plane7.name = "plane7";
 var geometryP6 = new THREE.PlaneGeometry(250, 250, 250);
-var materialP6 = new THREE.MeshPhongMaterial({ color: 0x272828, transparent: true, opacity: 0.25, side: THREE.DoubleSide, vertexColors: THREE.FaceColors });
+var materialP6 = new THREE.MeshPhongMaterial({ color: 0xedeff2, transparent: true, opacity: 0.25, side: THREE.DoubleSide, vertexColors: THREE.FaceColors });
 var plane8 = new THREE.Mesh(geometryP6, materialP6);
 plane8.name = "plane8";
+
 var geometry1 = new THREE.Geometry();
 geometry1.vertices.push(new THREE.Vector3(-20, -20, -20), new THREE.Vector3(20, -20, -20), new THREE.Vector3(20, 20, -20), new THREE.Vector3(-20, 20, -20), new THREE.Vector3(-20, -20, -20), new THREE.Vector3(-20, -20, 20), new THREE.Vector3(-20, 20, 20), new THREE.Vector3(-20, 20, -20), new THREE.Vector3(20, 20, -20), new THREE.Vector3(20, -20, -20), new THREE.Vector3(20, -20, 20), new THREE.Vector3(20, 20, 20), new THREE.Vector3(20, 20, -20), new THREE.Vector3(20, 20, 20), new THREE.Vector3(20, -20, 20), new THREE.Vector3(-20, -20, 20), new THREE.Vector3(-20, 20, 20), new THREE.Vector3(20, 20, 20));
 geometry1.computeBoundingSphere();
@@ -235,12 +243,14 @@ group.add(cylinderZ);
 group.add(stozek);
 group.add(stozekY);
 group.add(stozekZ);
-group.add(kula)
+group.add(kula);
+//plaszczyzny czarne;
 group.add(plane6);
 group.add(plane7);
 group.add(plane8);
+
 group_1.add(line);
-group.position.set(0, 0, -10);
+group.position.set(0, 0, -150);
 group_1.position.set($('#can').width() / 2 - 100, $('#can').height() / 2 - 100, -150);
 group_1.add(plane); //front
 group_1.add(plane1); //back
@@ -342,19 +352,25 @@ loader.load('fonts/helvetiker_regular.typeface.json', function (font) {
     textB.translateZ(21);
 });
 scene.add(group, group_1, group_2);
-objects.push(plane, plane1, plane2, plane3, plane4, plane5, cylinder,plane6,plane7,plane8);
+objects.push(plane, plane1, plane2, plane3, plane4, plane5, cylinder, plane6, plane7, plane8);
 p_o.push(plane6, plane7, plane8);
 
+function init() {
+
+}
 
 
 function onMouseDown(e) {
+    e.preventDefault();
+    if (e.button == 0) {
+        planeColor(e);
+        raycasterClik();
+    }
 
-
-    planeColor(e);
     isDragging = true;
     leftButtoMouse(e);
-    raycasterClik();
-    
+
+
     if (l) {
         block = true;
         linia(e);
@@ -382,12 +398,12 @@ function onMouseDown(e) {
 
 function onMouseMove(e) {
     e.preventDefault();
-    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
     raycasterMove(mouse);
     draging(e);
     mousePosition(e);
-    
+
     if (l)
         liniaM(e);
     if (k)
@@ -402,6 +418,7 @@ function onMouseMove(e) {
 
 function onMouseUp(e) {
     isDragging = false;
+
 }
 
 function onKeyDown(e) {
@@ -433,10 +450,11 @@ function contextmenu(e) {
 *
 *
 */
-
+var qutOut = new THREE.Quaternion();
 renderer.domElement.addEventListener("mousedown", onMouseDown);
-renderer.domElement.addEventListener("mousemove", onMouseMove,false);
+renderer.domElement.addEventListener("mousemove", onMouseMove, false);
 renderer.domElement.addEventListener("mouseup", onMouseUp);
+menuScetch.addEventListener("mouseup", onMouseUp);
 document.addEventListener("keydown", onKeyDown);
 document.addEventListener("wheel", onMouseWheel);
 renderer.domElement.addEventListener('contextmenu', contextmenu, false);
@@ -558,6 +576,7 @@ document.getElementById("pushF").onclick = function () {
     if (n % 2 != 0) {
         x = true;
         document.getElementById("pushF").style.backgroundColor = "red";
+        eulerBlock = new THREE.Euler(group_1.rotation._x, group_1.rotation._y , group_1.rotation._z, "XYZ");
     } else {
         x = false;
         document.getElementById("pushF").style.backgroundColor = "transparent";
@@ -637,8 +656,17 @@ function leftButtoMouse(e) {
         if (p == true) {
             $('#pushE').click();
         }
+
+        if (!menuScetchOK) {
+            menuScetch.addEventListener("contextmenu", function (e) { e.preventDefault() }, false);
+            menuScetch.style.display = "inline-block"
+            menuScetch.style.marginLeft = e.clientX + "px";
+            menuScetch.style.marginTop = e.clientY + "px";
+        }
+    }
+    if (e.button == 0) {
         block = false;
-        planeColor(e)
+        planeColor(e);
     }
 }
 
@@ -697,7 +725,7 @@ function scaleCanvas(e) {
         group.scale.set(scaleO, scaleO, scaleO);
 
     }
-    var mouse=new THREE.Vector2();
+    var mouse = new THREE.Vector2();
     mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
     mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
     document.getElementById("pFooter_1").innerHTML =
@@ -708,7 +736,7 @@ function scaleCanvas(e) {
 }
 
 function mousePosition(e) {
-    var mouse=new THREE.Vector2();
+    var mouse = new THREE.Vector2();
     mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
     mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
     document.getElementById("pFooter_1").innerHTML =
@@ -716,7 +744,7 @@ function mousePosition(e) {
         + mouse.x + '<p style="color:blue;">Y:'
         + mouse.y + '<p style="color:green;">Z:'
         + group_1.position.z / scale + '</p></p></p>';
-        
+
 }
 
 function linia(e) {
@@ -797,23 +825,41 @@ function kwadrat(e) {
 
     mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
     mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
-
-
-    switch (clickCanvas) {
+    if (!x) {
+      switch (clickCanvas) {
         case 0:
-            a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            break;
+          a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          break;
         default:
-            a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            break;
+          a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          break;
+      }
+  
+    } else {
+      
+      var euler = new THREE.Euler(-eulerBlock._x,-eulerBlock._y,-eulerBlock._z, "ZYX");
+      switch (clickCanvas) {
+        case 0:
+          a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          // a[1].applyEuler(euler);
+          break;
+        default:
+          a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+  
+          // a[1].applyEuler(euler);
+          break;
+      }
+  
     }
+  
     clickCanvas++;
     objects.splice(7 + g_2El, objects.length);
     for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-        objects.push(group_2.children[i]);
+      objects.push(group_2.children[i]);
     }
     g_2El = group_2.children.length;
-}
+  }
+  
 
 function okreg(e) {
 
@@ -940,36 +986,68 @@ function kwadratM(e) {
 
     mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
     mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
-
-
+  
     var material = new THREE.LineBasicMaterial({
-        color: 0x050505
+      color: 0x050505
     });
     var geometry = new THREE.Geometry();
-    switch (clickCanvas) {
-
+    if (!x) {
+      switch (clickCanvas) {
+  
         case 1:
-            a[3] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            a[2] = new THREE.Vector3(a[1].x, a[3].y, 0);
-            a[4] = new THREE.Vector3(a[3].x, a[1].y, 0);
-            a[5] = new THREE.Vector3(a[1].x, a[1].y, 0);
-            geometry.vertices.push(a[1], a[2], a[3], a[4], a[5]);
-            var box = new THREE.Line(geometry, material);
-            box.rotateZ(-group_1.rotation._z);
-            box.rotateY(-group_1.rotation._y);
-            box.rotateX(-group_1.rotation._x);
-            for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-                group_2.remove(group_2.children[i])
-            }
-            group_2.add(box);
-            break;
+          a[3] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          a[2] = new THREE.Vector3(a[1].x, a[3].y, 0);
+          a[4] = new THREE.Vector3(a[3].x, a[1].y, 0);
+          a[5] = new THREE.Vector3(a[1].x, a[1].y, 0);
+          geometry.vertices.push(a[1], a[2], a[3], a[4], a[5]);
+          var box = new THREE.Line(geometry, material);
+          box.rotateZ(-group_1.rotation._z);
+          box.rotateY(-group_1.rotation._y);
+          box.rotateX(-group_1.rotation._x);
+          for (var i = 0 + g_2El; i < group_2.children.length; i++) {
+            group_2.remove(group_2.children[i])
+          }
+          group_2.add(box);
+          break;
         default:
-            a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            clickCanvas = 0;
-            break;
+          a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          clickCanvas = 0;
+          break;
+      }
+    } else {
+  
+      
+      var euler = new THREE.Euler(-eulerBlock._x,-eulerBlock._y,-eulerBlock._z, "ZYX");
+      switch (clickCanvas) {
+  
+        case 1:
+  
+          a[3] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          // a[3].applyEuler(euler);
+          a[2] = new THREE.Vector3(a[1].x, a[3].y, 0);
+          a[4] = new THREE.Vector3(a[3].x, a[1].y, 0);
+          a[5] = new THREE.Vector3(a[1].x, a[1].y, 0);
+          geometry.vertices.push(a[1], a[2], a[3], a[4], a[5]);
+          var box = new THREE.Line(geometry, material);
+          box.setRotationFromEuler(euler);
+          // box.rotateZ(group_1.rotation._z);
+          // box.rotateY(group_1.rotation._y);
+          // box.rotateX(group_1.rotation._x);
+          for (var i = 0 + g_2El; i < group_2.children.length; i++) {
+            group_2.remove(group_2.children[i])
+          }
+          group_2.add(box);
+          break;
+        default:
+          a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+  
+          // a[1].applyEuler(euler);
+          clickCanvas = 0;
+          break;
+      }
     }
     render();
-}
+  }
 
 function okregM(e) {
 
@@ -1206,12 +1284,6 @@ function box_1(u, v, w, dir, width, height, depth, widthSegment, heightSegment, 
 }
 
 
-
-var lastFrameTime = new Date().getTime() / 1000;
-var totalGameTime = 0;
-
-
-
 function render() {
 
 
@@ -1228,14 +1300,16 @@ function raycasterClik() {
         toRotate(intersects, block);
         document.getElementById("pLine").innerHTML = 'Objekt o nazwie: ' + intersects[0].object.name;
         document.getElementById("pLine").style.color = "red";
-    }else{
-        document.getElementById("pLine").innerHTML = "Brak zaznaczonych obiektow."+mouse.x;
+    } else {
+        document.getElementById("pLine").innerHTML = "Brak zaznaczonych obiektow." + mouse.x;
         document.getElementById("pLine").style.color = "black";
     }
 }
 
+
+
 function raycasterMove() {
-    
+
     camera.lookAt(scene.position);
     camera.updateMatrixWorld();
     raycaster.setFromCamera(mouse, camera);
@@ -1256,15 +1330,49 @@ function raycasterMove() {
         //         };
         //     };
         // };
-
-
-
+        if (intersects[0].object.name == "plane6") {
+            intersects[0].object.material.color.set(0x272828);
+            intersects[0].object.material.opacity = "0.25";
+            intersects[0].object.geometry.colorsNeedUpdate = true;
+            menuScetchOK = false;
+            plane7.material.color.set(0xedeff2);
+            plane8.material.color.set(0xedeff2);
+            plane7.material.opacity = "0.01";
+            plane8.material.opacity = "0.01";
+        } else if (intersects[0].object.name == "plane7") {
+            intersects[0].object.material.color.set(0x272828);
+            intersects[0].object.material.opacity = "0.25";
+            intersects[0].object.geometry.colorsNeedUpdate = true;
+            menuScetchOK = false;
+            plane6.material.color.set(0xedeff2);
+            plane8.material.color.set(0xedeff2);
+            plane6.material.opacity = "0.01";
+            plane8.material.opacity = "0";
+        } else if (intersects[0].object.name == "plane8") {
+            intersects[0].object.material.color.set(0x272828);
+            intersects[0].object.material.opacity = "0.25";
+            intersects[0].object.geometry.colorsNeedUpdate = true;
+            menuScetchOK = false;
+            plane6.material.color.set(0xedeff2);
+            plane7.material.color.set(0xedeff2);
+            plane6.material.opacity = "0.01";
+            plane7.material.opacity = "0.01";
+        }
     } else {
         document.getElementById("pLine").innerHTML = "Brak zaznaczonych obiektow.";
         document.getElementById("pLine").style.color = "black";
+        // materialP6.color="0xedeff2";
+        plane6.material.color.set(0xedeff2);
+        plane7.material.color.set(0xedeff2);
+        plane8.material.color.set(0xedeff2);
+        plane6.material.opacity = "0";
+        plane7.material.opacity = "0";
+        plane8.material.opacity = "0";
+        menuScetch.style.display = "none";
+        menuScetchOK = true;
     }
     // render();
-    
+
 }
 
 function animate() {

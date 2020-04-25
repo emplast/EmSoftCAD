@@ -20,15 +20,48 @@
       height: 100%;
       /*border: 2px solid #edeff2;*/
     }
+    #menuScetch {
+      display: none;
+      width: 165px;
+      height: 180px;
+      position: absolute;
+      border: rgb(223, 221, 221) 1px solid;
+      padding: 15px;
+      box-shadow: grey 2px 2px 2px 2px;
+
+    }
+    #menuScetch ul{
+      list-style-type: none;
+
+    }
+    #menuScetch ul p{
+      
+      font-size: 12px;
+      margin: 5px;
+    }
+    #menuScetch ul p:hover{
+      
+      font-size: 14px;
+    }
   </style>
   </meta>
 </head>
-
+<div id="menuScetch"class="jumbotron" style="">
+  <ul>
+    <li class="menu-item"><p>Przesuń powierznie</p></li>
+    <li class="menu-item"><div style="margin: 10px auto 10px 2px;border-bottom: 1px solid rgb(172, 169, 169);width:120px ;height: 5px;"></div></li>
+    <li class="menu-item"><p>Link 2</p></li>
+    <li class="menu-item"><p>Link 3</p></li>
+  </ul>
+</div>
 <body>
   <script src="js/three.js"></script>
   <script src="js/jquery-3.2.1.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <!-- <script src="js/TrackBallControls.js"></script> -->
+
+  <!-- <script src="js/plik/script.js"></script> -->
+  
   <script src="js/plik/function.js"></script>
   <!-- <script src="js/Projector.js"></script>-->
   <!-- <script src="js/plik/trackBall.js" -->
