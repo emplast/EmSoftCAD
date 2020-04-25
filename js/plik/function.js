@@ -342,7 +342,7 @@ loader.load('fonts/helvetiker_regular.typeface.json', function (font) {
     textB.translateZ(21);
 });
 scene.add(group, group_1, group_2);
-objects.push(plane, plane1, plane2, plane3, plane4, plane5, cylinder);
+objects.push(plane, plane1, plane2, plane3, plane4, plane5, cylinder,plane6,plane7,plane8);
 p_o.push(plane6, plane7, plane8);
 
 
@@ -353,6 +353,8 @@ function onMouseDown(e) {
     planeColor(e);
     isDragging = true;
     leftButtoMouse(e);
+    raycasterClik();
+    
     if (l) {
         block = true;
         linia(e);
@@ -379,13 +381,13 @@ function onMouseDown(e) {
 
 
 function onMouseMove(e) {
-
     e.preventDefault();
-    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
-    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
+    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    raycasterMove(mouse);
     draging(e);
     mousePosition(e);
-    render();
+    
     if (l)
         liniaM(e);
     if (k)
@@ -410,6 +412,7 @@ function onKeyDown(e) {
 function onMouseWheel(e) {
 
     scaleCanvas(e);
+    // console.log(e.deltaY);
 }
 
 function contextmenu(e) {
@@ -432,25 +435,25 @@ function contextmenu(e) {
 */
 
 renderer.domElement.addEventListener("mousedown", onMouseDown);
-renderer.domElement.addEventListener("mousemove", onMouseMove);
+renderer.domElement.addEventListener("mousemove", onMouseMove,false);
 renderer.domElement.addEventListener("mouseup", onMouseUp);
 document.addEventListener("keydown", onKeyDown);
 document.addEventListener("wheel", onMouseWheel);
 renderer.domElement.addEventListener('contextmenu', contextmenu, false);
 
 //PRZYCISKI
-document.getElementById("pushX").onclick=function(){
+document.getElementById("pushX").onclick = function () {
     m++;
     if (m % 2 != 0) {
-        document.getElementById("pushX").style.backgroundColor="red";
-        document.getElementById("text1").innerHTML="";
+        document.getElementById("pushX").style.backgroundColor = "red";
+        document.getElementById("text1").innerHTML = "";
     } else {
-        document.getElementById("pushX").style.backgroundColor="transparent";
+        document.getElementById("pushX").style.backgroundColor = "transparent";
         m = 0;
         block = false;
     }
 }
-document.getElementById("pushY").onclick=function(){
+document.getElementById("pushY").onclick = function () {
     n++;
     if (n % 2 != 0) {
         l = true;
@@ -460,11 +463,11 @@ document.getElementById("pushY").onclick=function(){
             lineEnd = false;
             block = false;
         }
-        document.getElementById("pushY").style.backgroundColor="red";
+        document.getElementById("pushY").style.backgroundColor = "red";
     } else {
         l = false;
         block = false;
-        document.getElementById("pushY").style.backgroundColor="transparent";
+        document.getElementById("pushY").style.backgroundColor = "transparent";
         group_2.remove(group_2.children[group_2.children.length - 1]);
         lineEnd = false;
         clickCanvas = 0;
@@ -472,92 +475,92 @@ document.getElementById("pushY").onclick=function(){
         n = 0;
     }
 }
-document.getElementById("pushZ").onclick=function(){
+document.getElementById("pushZ").onclick = function () {
     n++;
     if (n % 2 != 0) {
         k = true;
-        document.getElementById("pushZ").style.backgroundColor="red";
+        document.getElementById("pushZ").style.backgroundColor = "red";
     } else {
         k = false;
         block = false;
-        document.getElementById("pushZ").style.backgroundColor="transparent";
+        document.getElementById("pushZ").style.backgroundColor = "transparent";
         clickCanvas = 0;
         n = 0;
     }
 }
-document.getElementById("pushA").onclick=function(){
+document.getElementById("pushA").onclick = function () {
     n++;
     if (n % 2 != 0) {
         c = true;
-        document.getElementById("pushA").style.backgroundColor="red";
+        document.getElementById("pushA").style.backgroundColor = "red";
     } else {
         c = false;
         block = false;
-        document.getElementById("pushA").style.backgroundColor="transparent";
+        document.getElementById("pushA").style.backgroundColor = "transparent";
         clickCanvas = 0;
         n = 0;
     }
 }
-document.getElementById("pushG").onclick=function(){
+document.getElementById("pushG").onclick = function () {
     alert("Kliknełeś na #pushG");
 }
-document.getElementById("pushC").onclick=function(){
+document.getElementById("pushC").onclick = function () {
     alert("Kliknełeś na #pushC");
 }
-document.getElementById("pushD").onclick=function(){
+document.getElementById("pushD").onclick = function () {
     $('#cylinder').fadeToggle();
     n = -1;
     $('#cylinderA').click();
     n = -1;
     $('#cylinderB').click();
 }
-document.getElementById("cylinderA").onclick=function(){
+document.getElementById("cylinderA").onclick = function () {
     n++;
     if (n % 2 != 0) {
         o = true;
         f = 1;
-        document.getElementById("cylinderA").style.backgroundColor="red";
+        document.getElementById("cylinderA").style.backgroundColor = "red";
     } else {
         o = false;
         block = false;
-        document.getElementById("cylinderA").style.backgroundColor="transparent";
+        document.getElementById("cylinderA").style.backgroundColor = "transparent";
         n = 0;
     }
 }
-document.getElementById("cylinderB").onclick=function(){
+document.getElementById("cylinderB").onclick = function () {
     n++;
     if (n % 2 != 0) {
         o = true;
         f = 0;
-        document.getElementById("cylinderB").style.backgroundColor="red";
+        document.getElementById("cylinderB").style.backgroundColor = "red";
     } else {
         o = false;
         block = false;
-        document.getElementById("cylinderB").style.backgroundColor="transparent";
+        document.getElementById("cylinderB").style.backgroundColor = "transparent";
         n = 0;
     }
 }
-document.getElementById("pushE").onclick=function(){
+document.getElementById("pushE").onclick = function () {
     n++;
     if (n % 2 != 0) {
         p = true;
-        document.getElementById("pushE").style.backgroundColor="red";
+        document.getElementById("pushE").style.backgroundColor = "red";
     } else {
         p = false;
         block = false;
-        document.getElementById("pushE").style.backgroundColor="transparent";
+        document.getElementById("pushE").style.backgroundColor = "transparent";
         clickCanvas = 0;
         n = 0;
     }
 }
-document.getElementById("pushF").onclick=function(){
+document.getElementById("pushF").onclick = function () {
     n++;
     if (n % 2 != 0) {
         x = true;
-        document.getElementById("pushF").style.backgroundColor="red";
+        document.getElementById("pushF").style.backgroundColor = "red";
     } else {
         x = false;
-        document.getElementById("pushF").style.backgroundColor="transparent";
+        document.getElementById("pushF").style.backgroundColor = "transparent";
         clickCanvas = 0;
         n = 0;
     }
@@ -668,7 +671,7 @@ function escDelete(e) {
 }
 
 function scaleCanvas(e) {
-    if (e.originalEvent.deltaY < 0) {
+    if (e.deltaY < 0) {
         scale = scale + 0.01;
         if (scaleO < 1.6) {
             scaleO = scale;
@@ -692,15 +695,28 @@ function scaleCanvas(e) {
         }
         group_2.scale.set(scale, scale, scale);
         group.scale.set(scaleO, scaleO, scaleO);
-    }
-}
 
-function mousePosition(e) {
+    }
+    var mouse=new THREE.Vector2();
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
     document.getElementById("pFooter_1").innerHTML =
         '<p style="color:red">X:'
         + mouse.x + '<p style="color:blue;">Y:'
         + mouse.y + '<p style="color:green;">Z:'
         + group_1.position.z / scale + '</p></p></p>';
+}
+
+function mousePosition(e) {
+    var mouse=new THREE.Vector2();
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
+    document.getElementById("pFooter_1").innerHTML =
+        '<p style="color:red">X:'
+        + mouse.x + '<p style="color:blue;">Y:'
+        + mouse.y + '<p style="color:green;">Z:'
+        + group_1.position.z / scale + '</p></p></p>';
+        
 }
 
 function linia(e) {
@@ -830,9 +846,9 @@ function walec(e) {
     switch (clickCanvas) {
         case 0:
             pozycja[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z,"ZYX"));
+            pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
             break;
-        
+
     }
     clickCanvas++;
     objects.splice(7 + g_2El, objects.length);
@@ -1006,12 +1022,12 @@ function walecM(e) {
             });
             segments = 32;
             srednica = new THREE.Vector3(mouse.x, mouse.y, 0);
-            srednica.applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y,-group_1.rotation._z,"ZYX"));
+            srednica.applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
             radius_1 = srednica.distanceTo(pozycja[1]);
             geometry = new THREE.CircleGeometry(radius_1, segments, 0, (Math.PI * 2).toFixed(2)),
-            geometry.vertices.shift();
+                geometry.vertices.shift();
             circle = new THREE.Line(geometry, material),
-            circle.position.set(pozycja[1].x, pozycja[1].y, pozycja[1].z);
+                circle.position.set(pozycja[1].x, pozycja[1].y, pozycja[1].z);
             circle.rotateZ(-group_1.rotation._z);
             circle.rotateY(-group_1.rotation._y);
             circle.rotateX(-group_1.rotation._x);
@@ -1034,7 +1050,7 @@ function walecM(e) {
             cylinder.position.set(pozycja[1].x, pozycja[1].y, pozycja[1].z);
             cylinder.rotateZ(-group_1.rotation._z);
             cylinder.rotateY(-group_1.rotation._y);
-            cylinder.rotateX(-group_1.rotation._x -toRadians(90));
+            cylinder.rotateX(-group_1.rotation._x - toRadians(90));
             cylinder.name = 'Walec';
             for (var i = 0 + g_2El; i < group_2.children.length; i++) {
                 group_2.remove(group_2.children[i])
@@ -1197,6 +1213,12 @@ var totalGameTime = 0;
 
 
 function render() {
+
+
+    renderer.render(scene, camera);
+}
+
+function raycasterClik() {
     camera.lookAt(scene.position);
     camera.updateMatrixWorld();
     raycaster.setFromCamera(mouse, camera);
@@ -1204,32 +1226,49 @@ function render() {
     var intersects = raycaster.intersectObjects(objects);
     if (intersects.length > 0) {
         toRotate(intersects, block);
-       
-            document.getElementById("pLine").innerHTML = 'Objekt o nazwie: ' + intersects[0].object.name;
-            document.getElementById("pLine").style.color = "red";
-            // document.onKeyDown = function (e) {
-            //     if (e.which == 46) {
-            //         group_2.remove(intersects[0].object);
-            //         objects.splice(7, objects.length);
-            //         for (var i = 0; i < group_2.children.length; i++) {
-            //             if (group_2.children[i] != objects[i + 7]) {
-            //                 objects.push(group_2.children[i]);
-            //             };
-            //         };
-            //     };
-            // };
-        
-
-    } else {
-        document.getElementById("pLine").innerHTML = "Brak zaznaczonych obiektow";
+        document.getElementById("pLine").innerHTML = 'Objekt o nazwie: ' + intersects[0].object.name;
+        document.getElementById("pLine").style.color = "red";
+    }else{
+        document.getElementById("pLine").innerHTML = "Brak zaznaczonych obiektow."+mouse.x;
         document.getElementById("pLine").style.color = "black";
     }
+}
 
-    renderer.render(scene, camera);
+function raycasterMove() {
+    
+    camera.lookAt(scene.position);
+    camera.updateMatrixWorld();
+    raycaster.setFromCamera(mouse, camera);
+    raycaster.linePrecision = 3;
+    var intersects = raycaster.intersectObjects(objects);
+    if (intersects.length > 0) {
+
+        document.getElementById("pLine").innerHTML = 'Objekt o nazwie: ' + intersects[0].object.name;
+        document.getElementById("pLine").style.color = "red";
+        // document.onKeyDown = function (e) {
+        //     if (e.which == 46) {
+        //         group_2.remove(intersects[0].object);
+        //         objects.splice(7, objects.length);
+        //         for (var i = 0; i < group_2.children.length; i++) {
+        //             if (group_2.children[i] != objects[i + 7]) {
+        //                 objects.push(group_2.children[i]);
+        //             };
+        //         };
+        //     };
+        // };
+
+
+
+    } else {
+        document.getElementById("pLine").innerHTML = "Brak zaznaczonych obiektow.";
+        document.getElementById("pLine").style.color = "black";
+    }
+    // render();
+    
 }
 
 function animate() {
-    requestAnimationFrame(animate);
+    window.requestAnimationFrame(animate);
     render();
 }
 animate();
