@@ -280,7 +280,7 @@ var depth,
     x_v = [new THREE.Vector3()],
     v_z = 0;
 
-loader.load('http://cad.emsoft.net.pl/fonts/helvetiker_regular.typeface.json', function (font) {
+loader.load('fonts/helvetiker_regular.typeface.json', function (font) {
     var xMid, text;
     var textShape = new THREE.BufferGeometry();
     var textShapeR = new THREE.BufferGeometry();
