@@ -26,42 +26,49 @@
       height: 180px;
       position: absolute;
       border: rgb(223, 221, 221) 1px solid;
-      padding: 15px;
       box-shadow: grey 2px 2px 2px 2px;
+      background-color: rgb(233, 230, 230);
 
     }
     #menuScetch ul{
       list-style-type: none;
 
     }
+    .menu-item{display: block;}
+    .menu-item:not(.nohover):hover{background-color: grey;}
+    
     #menuScetch ul p{
       
-      font-size: 12px;
-      margin: 5px;
-    }
-    #menuScetch ul p:hover{
-      
       font-size: 14px;
+      margin: 15px;
     }
+    hr{
+      border:1px solid rgb(179, 176, 176);
+      margin: 0 auto;
+      width: 90%;
+    }
+
+    
   </style>
   </meta>
 </head>
-<div id="menuScetch"class="jumbotron" style="">
+<div id="menuScetch">
   <ul>
     <li class="menu-item"><p>Przesuń powierznie</p></li>
-    <li class="menu-item"><div style="margin: 10px auto 10px 2px;border-bottom: 1px solid rgb(172, 169, 169);width:120px ;height: 5px;"></div></li>
+    <li class="menu-item nohover"><p ><hr /></p></li>
     <li class="menu-item"><p>Link 2</p></li>
     <li class="menu-item"><p>Link 3</p></li>
   </ul>
 </div>
 <body>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script> -->
   <script src="js/three.js"></script>
   <script src="js/jquery-3.2.1.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <!-- <script src="js/TrackBallControls.js"></script> -->
 
-  <!-- <script src="js/plik/script.js"></script> -->
-  
+  <script src="js/plik/script.js"></script>
+
   <script src="js/plik/function.js"></script>
   <!-- <script src="js/Projector.js"></script>-->
   <!-- <script src="js/plik/trackBall.js" -->

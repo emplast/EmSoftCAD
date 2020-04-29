@@ -11,7 +11,7 @@
  * 
  */
 
-// nie ruszć nic nie dopisywać
+
 
 var isDragging = false;
 var previousMousePosition = {
@@ -28,11 +28,12 @@ var height = window.innerHeight;
 var group = new THREE.Group();
 var group_1 = new THREE.Group();
 var group_2 = new THREE.Group();
+var group_3 = new THREE.Group();
 var loader = new THREE.FontLoader();
 var lineEnd = false;
 var eulerBlock;
-var m = 0;
-var n = 0;
+var n = 0, nF = 0, nX = 0, nY = 0, nZ = 0;
+var nA = 0, nD = 0, nA = 0, nB = 0, nE = 0;
 var f = 0;
 var o = false;
 var p = false;
@@ -85,20 +86,20 @@ icon.style.left = 50 + 'px';
 icon.style.top = 20 + 'px';
 document.body.appendChild(icon);
 icon.setAttribute('id', 'icon');
-$('#icon').append('<img  id="pushY" title="Kreślenie lini" src="icon/Part_Line_Parametric.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2;" width="25"height="25">');
-$('#icon').append('<img height="25" id="pushZ" title="Kreślenie kwadratu" src="icon/Draft_Rectangle.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
-$('#icon').append('<img height="25" id="pushA" title="Kreślenie koła" src="icon/Part_Circle_Parametric.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">')
-$('#icon').append('<img height="25" id="pushB" title="Puste" src="icon/Draft_Polygon.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
-$('#icon').append('<img height="25" id="pushC" title="Puste" src="icon/Draft_Point.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25"></br></br>');
+$('#icon').append('<img  id="pushY" title="Kreślenie lini pushY" src="http://www.cad.emsoft.net.pl/icon/Part_Line_Parametric.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2;" width="25"height="25">');
+$('#icon').append('<img height="25" id="pushZ" title="Kreślenie kwadratu pushZ" src="http://www.cad.emsoft.net.pl/icon/Draft_Rectangle.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
+$('#icon').append('<img height="25" id="pushA" title="Kreślenie koła pushA" src="http://www.cad.emsoft.net.pl/icon/Part_Circle_Parametric.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">')
+$('#icon').append('<img height="25" id="pushB" title="Puste pushB" src="http://www.cad.emsoft.net.pl/icon/Draft_Polygon.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
+$('#icon').append('<img height="25" id="pushC" title="Puste pushC" src="http://www.cad.emsoft.net.pl/icon/Draft_Point.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25"></br></br>');
 // </br>
-$('#icon').append('<img height="25" id="pushX" title="Puste" src="icon/Sketcher_External.png" style="float:left;margin-left: 10px;border: 0.5px solid #edeff2" width="25">');
-$('#icon').append('<img height="25" id="pushD" title="Kreślenie walca" src="icon/Part_Cylinder.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
+$('#icon').append('<img height="25" id="pushX" title="Puste pushX" src="http://www.cad.emsoft.net.pl/icon/Sketcher_External.png" style="float:left;margin-left: 10px;border: 0.5px solid #edeff2" width="25">');
+$('#icon').append('<img height="25" id="pushD" title="Kreślenie walca pushD" src="http://www.cad.emsoft.net.pl/icon/Part_Cylinder.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
 $('#icon').append('<div id="cylinder" style="display:none"></div>');
-$('#cylinder').append('<img height="30" id="cylinderA" src="icon/Fem-2D-1.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="30"></img>');
-$('#cylinder').append('<img height="30" id="cylinderB" src="icon/Fem-2D.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="30"></img>');
-$('#icon').append('<img height="25" id="pushE" title="Kreślenie sześcianu" src="icon/Part_Workbench.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
-$('#icon').append('<img height="25" id="pushF" title="Blokowanie płaszczyzny kreślenia" src="icon/Part_Extrude.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
-$('#icon').append('<img height="25" id="pushG" title="Puste" src="icon/if_info_blue_40801.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
+$('#cylinder').append('<img height="30" id="cylinderA" src="http://www.cad.emsoft.net.pl/icon/Fem-2D-1.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="30"></img>');
+$('#cylinder').append('<img height="30" id="cylinderB" src="http://www.cad.emsoft.net.pl/icon/Fem-2D.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="30"></img>');
+$('#icon').append('<img height="25" id="pushE" title="Kreślenie sześcianu pushE" src="http://www.cad.emsoft.net.pl/icon/Part_Workbench.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
+$('#icon').append('<img height="25" id="pushF" title="Blokowanie płaszczyzny kreślenia pushF" src="http://www.cad.emsoft.net.pl/icon/Part_Mirror.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
+$('#icon').append('<img height="25" id="pushG" title="Puste pushG" src="http://www.cad.emsoft.net.pl/icon/if_info_blue_40801.png" style="float:left;margin-left: 10px;border:0.5px solid #edeff2" width="25">');
 var footer = document.createElement('div');
 footer.style.position = 'absolute';
 footer.setAttribute('id', 'footer');
@@ -186,18 +187,18 @@ plane5.name = 'top';
 var material1 = new THREE.LineBasicMaterial({
     color: 0x050505
 });
-
+// color: 0xedeff2,
 //płaszczyzny czarne
 var geometryP4 = new THREE.PlaneGeometry(250, 250, 250);
-var materialP4 = new THREE.MeshBasicMaterial({ color: 0xedeff2, transparent: true, opacity: 0.25, side: THREE.DoubleSide, vertexColors: THREE.FaceColors });
+var materialP4 = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, side: THREE.DoubleSide, vertexColors: THREE.FaceColors });
 var plane6 = new THREE.Mesh(geometryP4, materialP4);
 plane6.name = "plane6";
 var geometryP5 = new THREE.PlaneGeometry(250, 250, 250);
-var materialP5 = new THREE.MeshPhongMaterial({ color: 0xedeff2, transparent: true, opacity: 0.25, side: THREE.DoubleSide, vertexColors: THREE.FaceColors });
+var materialP5 = new THREE.MeshPhongMaterial({ transparent: true, opacity: 0, side: THREE.DoubleSide, vertexColors: THREE.FaceColors });
 var plane7 = new THREE.Mesh(geometryP5, materialP5);
 plane7.name = "plane7";
 var geometryP6 = new THREE.PlaneGeometry(250, 250, 250);
-var materialP6 = new THREE.MeshPhongMaterial({ color: 0xedeff2, transparent: true, opacity: 0.25, side: THREE.DoubleSide, vertexColors: THREE.FaceColors });
+var materialP6 = new THREE.MeshPhongMaterial({ transparent: true, opacity: 0, side: THREE.DoubleSide, vertexColors: THREE.FaceColors });
 var plane8 = new THREE.Mesh(geometryP6, materialP6);
 plane8.name = "plane8";
 
@@ -233,9 +234,15 @@ plane8.rotateX(toRadians(90));
 // group.rotateY(toRadians(-30));
 // group_1.rotateX(toRadians(30));
 // group_1.rotateY(toRadians(-30));
-group.setRotationFromEuler(new THREE.Euler(toRadians(30), toRadians(-30), 0));
-group_1.setRotationFromEuler(new THREE.Euler(toRadians(30), toRadians(-30), 0));
-group_2.setRotationFromEuler(new THREE.Euler(toRadians(30), toRadians(-30), 0));
+group.quaternion.setFromEuler(new THREE.Euler(toRadians(30), toRadians(-30), 0, "XYZ"));
+group_1.quaternion.setFromEuler(new THREE.Euler(toRadians(30), toRadians(-30), 0, "XYZ"));
+group_2.quaternion.setFromEuler(new THREE.Euler(toRadians(30), toRadians(-30), 0, "XYZ"));
+group_3.quaternion.setFromEuler(new THREE.Euler(toRadians(30), toRadians(-30), 0, "XYZ"));
+group.quaternion.normalize();
+group_1.quaternion.normalize();
+group_2.quaternion.normalize();
+group_3.quaternion.normalize();
+
 
 group.add(cylinder);
 group.add(cylinderY);
@@ -273,7 +280,7 @@ var depth,
     x_v = [new THREE.Vector3()],
     v_z = 0;
 
-loader.load('fonts/helvetiker_regular.typeface.json', function (font) {
+loader.load('http://cad.emsoft.net.pl/fonts/helvetiker_regular.typeface.json', function (font) {
     var xMid, text;
     var textShape = new THREE.BufferGeometry();
     var textShapeR = new THREE.BufferGeometry();
@@ -351,7 +358,7 @@ loader.load('fonts/helvetiker_regular.typeface.json', function (font) {
     textB.rotateY(toRadians(180));
     textB.translateZ(21);
 });
-scene.add(group, group_1, group_2);
+scene.add(group, group_1, group_2, group_3);
 objects.push(plane, plane1, plane2, plane3, plane4, plane5, cylinder, plane6, plane7, plane8);
 p_o.push(plane6, plane7, plane8);
 
@@ -460,20 +467,46 @@ document.addEventListener("wheel", onMouseWheel);
 renderer.domElement.addEventListener('contextmenu', contextmenu, false);
 
 //PRZYCISKI
+
+
 document.getElementById("pushX").onclick = function () {
-    m++;
-    if (m % 2 != 0) {
-        document.getElementById("pushX").style.backgroundColor = "red";
-        document.getElementById("text1").innerHTML = "";
-    } else {
+    // nX++;
+    // if (nX == 1) {
+    //     document.getElementById("pushX").style.backgroundColor = "red";
+    //     document.getElementById("text1").innerHTML = "";
+    // } else {
+    //     document.getElementById("pushX").style.backgroundColor = "transparent";
+    //     nX = 0;
+    //     block = false;
+    // }
+    document.getElementById("pushX").style.backgroundColor = "red";
+    document.getElementById("text1").innerHTML = "";
+    setTimeout(function () {
         document.getElementById("pushX").style.backgroundColor = "transparent";
-        m = 0;
-        block = false;
-    }
+        var qua = new THREE.Quaternion();
+        if (x) {
+
+
+            qua.setFromEuler(new THREE.Euler(eulerBlock._x, eulerBlock._y, eulerBlock._z, "XYZ"));
+            if (group_1.quaternion != qua) {
+                group_3.quaternion.set(qua._x, qua._y, qua._z, qua._w);
+                group_2.quaternion.set(qua._x, qua._y, qua._z, qua._w);
+                group_1.quaternion.set(qua._x, qua._y, qua._z, qua._w);
+                group.quaternion.set(qua._x, qua._y, qua._z, qua._w);
+
+            }
+        }else{
+            group.setRotationFromEuler(new THREE.Euler(3.14159265358979,3.6739403974420594e-16,3.141592653589793,"XYZ"));
+            group_1.setRotationFromEuler(new THREE.Euler(3.14159265358979,3.6739403974420594e-16,3.141592653589793,"XYZ"));
+            group_2.setRotationFromEuler(new THREE.Euler(3.14159265358979,3.6739403974420594e-16,3.141592653589793,"XYZ"));
+            group_3.setRotationFromEuler(new THREE.Euler(3.14159265358979,3.6739403974420594e-16,3.141592653589793,"XYZ"));
+        }
+    }, 150);
+
 }
 document.getElementById("pushY").onclick = function () {
-    n++;
-    if (n % 2 != 0) {
+    nY++;
+    if (nY % 2 != 0) {
         l = true;
         if (group_2.children.length > 0) {
             lineEnd = true;
@@ -490,12 +523,12 @@ document.getElementById("pushY").onclick = function () {
         lineEnd = false;
         clickCanvas = 0;
         endLine.splice(1, endLine.length);
-        n = 0;
+        nY = 0;
     }
 }
 document.getElementById("pushZ").onclick = function () {
-    n++;
-    if (n % 2 != 0) {
+    nZ++;
+    if (nZ == 1) {
         k = true;
         document.getElementById("pushZ").style.backgroundColor = "red";
     } else {
@@ -503,12 +536,12 @@ document.getElementById("pushZ").onclick = function () {
         block = false;
         document.getElementById("pushZ").style.backgroundColor = "transparent";
         clickCanvas = 0;
-        n = 0;
+        nZ = 0;
     }
 }
 document.getElementById("pushA").onclick = function () {
-    n++;
-    if (n % 2 != 0) {
+    nA++;
+    if (nA == 1) {
         c = true;
         document.getElementById("pushA").style.backgroundColor = "red";
     } else {
@@ -516,25 +549,33 @@ document.getElementById("pushA").onclick = function () {
         block = false;
         document.getElementById("pushA").style.backgroundColor = "transparent";
         clickCanvas = 0;
-        n = 0;
+        nA = 0;
     }
 }
 document.getElementById("pushG").onclick = function () {
-    alert("Kliknełeś na #pushG");
+    // alert("Kliknełeś na #pushG");
+
+    var df = new THREE.Euler(group_3.rotation._x, group_3.rotation._y, group_3.rotation._z, "XYZ");
+    // var dq = new THREE.Euler(group_1.quaternion);
+    console.log("Euler pobrany: ");
+    console.log(df);
+    // console.log("Quaternion pobrany: ");
+    // console.log(dq);
+    // console.log(toDegrees(group_1.rotation._y));
 }
 document.getElementById("pushC").onclick = function () {
     alert("Kliknełeś na #pushC");
 }
 document.getElementById("pushD").onclick = function () {
     $('#cylinder').fadeToggle();
-    n = -1;
+    nA = -1;
     $('#cylinderA').click();
-    n = -1;
+    nB = -1;
     $('#cylinderB').click();
 }
 document.getElementById("cylinderA").onclick = function () {
-    n++;
-    if (n % 2 != 0) {
+    nA++;
+    if (nA == 1) {
         o = true;
         f = 1;
         document.getElementById("cylinderA").style.backgroundColor = "red";
@@ -542,12 +583,12 @@ document.getElementById("cylinderA").onclick = function () {
         o = false;
         block = false;
         document.getElementById("cylinderA").style.backgroundColor = "transparent";
-        n = 0;
+        nA = 0;
     }
 }
 document.getElementById("cylinderB").onclick = function () {
-    n++;
-    if (n % 2 != 0) {
+    nB++;
+    if (nB == 1) {
         o = true;
         f = 0;
         document.getElementById("cylinderB").style.backgroundColor = "red";
@@ -555,12 +596,12 @@ document.getElementById("cylinderB").onclick = function () {
         o = false;
         block = false;
         document.getElementById("cylinderB").style.backgroundColor = "transparent";
-        n = 0;
+        nB = 0;
     }
 }
 document.getElementById("pushE").onclick = function () {
-    n++;
-    if (n % 2 != 0) {
+    nE++;
+    if (nE == 1) {
         p = true;
         document.getElementById("pushE").style.backgroundColor = "red";
     } else {
@@ -568,22 +609,37 @@ document.getElementById("pushE").onclick = function () {
         block = false;
         document.getElementById("pushE").style.backgroundColor = "transparent";
         clickCanvas = 0;
-        n = 0;
+        nE = 0;
     }
 }
 document.getElementById("pushF").onclick = function () {
-    n++;
-    if (n % 2 != 0) {
+    nF++;
+    var geometry = new THREE.PlaneGeometry(250, 250, 250);
+    var material = new THREE.MeshBasicMaterial({ color: 0x616263, transparent: true, opacity: 0.25, side: THREE.DoubleSide, vertexColors: THREE.FaceColors });
+    var plane9 = new THREE.Mesh(geometry, material);
+    plane9.name = "planeBlock";
+    if (nF == 1) {
         x = true;
         document.getElementById("pushF").style.backgroundColor = "red";
-        eulerBlock = new THREE.Euler(group_1.rotation._x, group_1.rotation._y , group_1.rotation._z, "XYZ");
+        eulerBlock = new THREE.Euler(-group_1.rotation._x,-group_1.rotation._y,-group_1.rotation._z, "ZYX");
+        plane9.setRotationFromEuler(new THREE.Euler(eulerBlock._x,eulerBlock._y,eulerBlock._z,"ZYX"));
+        group_3.add(plane9);
+
     } else {
         x = false;
         document.getElementById("pushF").style.backgroundColor = "transparent";
         clickCanvas = 0;
-        n = 0;
+        nF = 0;
+        group_3.remove(group_3.children[0]);
+
     }
+    render();
 }
+
+
+
+//FUNKCJE POZOSTAŁE
+
 
 function planeColor(e) {
 
@@ -629,6 +685,7 @@ function draging(e) {
         group.quaternion.multiplyQuaternions(deltaRotationQuaternion, group.quaternion);
         group_1.quaternion.multiplyQuaternions(deltaRotationQuaternion, group_1.quaternion);
         group_2.quaternion.multiplyQuaternions(deltaRotationQuaternion, group_2.quaternion);
+        group_3.quaternion.multiplyQuaternions(deltaRotationQuaternion, group_3.quaternion);
     }
     previousMousePosition = {
         x: e.offsetX,
@@ -821,69 +878,69 @@ function linia(e) {
     }
 }
 
-function kwadrat(e) {
+// function kwadrat(e) {
 
-    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
-    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
-    if (!x) {
-      switch (clickCanvas) {
-        case 0:
-          a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-          break;
-        default:
-          a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-          break;
-      }
-  
-    } else {
-      
-      var euler = new THREE.Euler(-eulerBlock._x,-eulerBlock._y,-eulerBlock._z, "ZYX");
-      switch (clickCanvas) {
-        case 0:
-          a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-          // a[1].applyEuler(euler);
-          break;
-        default:
-          a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-  
-          // a[1].applyEuler(euler);
-          break;
-      }
-  
-    }
-  
-    clickCanvas++;
-    objects.splice(7 + g_2El, objects.length);
-    for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-      objects.push(group_2.children[i]);
-    }
-    g_2El = group_2.children.length;
-  }
-  
+//     mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+//     mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
+//     if (!x) {
+//         switch (clickCanvas) {
+//             case 0:
+//                 a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+//                 break;
+//             default:
+//                 a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+//                 break;
+//         }
 
-function okreg(e) {
+//     } else {
 
-    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
-    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
+//         var euler = new THREE.Euler(-eulerBlock._x, -eulerBlock._y, -eulerBlock._z, "ZYX");
+//         switch (clickCanvas) {
+//             case 0:
+//                 a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+//                 // a[1].applyEuler(euler);
+//                 break;
+//             default:
+//                 a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
 
-    switch (clickCanvas) {
-        case 0:
-            pozycja[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
-            break;
-        default:
-            pozycja[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
-            break;
-    }
-    clickCanvas++;
-    objects.splice(7 + g_2El, objects.length);
-    for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-        objects.push(group_2.children[i]);
-    }
-    g_2El = group_2.children.length;
-    render();
-}
+//                 // a[1].applyEuler(euler);
+//                 break;
+//         }
+
+//     }
+
+//     clickCanvas++;
+//     objects.splice(7 + g_2El, objects.length);
+//     for (var i = 0 + g_2El; i < group_2.children.length; i++) {
+//         objects.push(group_2.children[i]);
+//     }
+//     g_2El = group_2.children.length;
+// }
+
+
+// function okreg(e) {
+
+//     mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+//     mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
+
+//     switch (clickCanvas) {
+//         case 0:
+//             pozycja[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+//             pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
+//             break;
+//         default:
+//             pozycja[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+//             pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
+//             break;
+//     }
+//     clickCanvas++;
+//     objects.splice(7 + g_2El, objects.length);
+//     for (var i = 0 + g_2El; i < group_2.children.length; i++) {
+//         objects.push(group_2.children[i]);
+//     }
+//     g_2El = group_2.children.length;
+//     render();
+// }
 
 function walec(e) {
     mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
@@ -982,111 +1039,111 @@ function liniaM(e) {
     }
 }
 
-function kwadratM(e) {
+// function kwadratM(e) {
 
-    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
-    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
-  
-    var material = new THREE.LineBasicMaterial({
-      color: 0x050505
-    });
-    var geometry = new THREE.Geometry();
-    if (!x) {
-      switch (clickCanvas) {
-  
-        case 1:
-          a[3] = new THREE.Vector3(mouse.x, mouse.y, 0);
-          a[2] = new THREE.Vector3(a[1].x, a[3].y, 0);
-          a[4] = new THREE.Vector3(a[3].x, a[1].y, 0);
-          a[5] = new THREE.Vector3(a[1].x, a[1].y, 0);
-          geometry.vertices.push(a[1], a[2], a[3], a[4], a[5]);
-          var box = new THREE.Line(geometry, material);
-          box.rotateZ(-group_1.rotation._z);
-          box.rotateY(-group_1.rotation._y);
-          box.rotateX(-group_1.rotation._x);
-          for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-            group_2.remove(group_2.children[i])
-          }
-          group_2.add(box);
-          break;
-        default:
-          a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-          clickCanvas = 0;
-          break;
-      }
-    } else {
-  
-      
-      var euler = new THREE.Euler(-eulerBlock._x,-eulerBlock._y,-eulerBlock._z, "ZYX");
-      switch (clickCanvas) {
-  
-        case 1:
-  
-          a[3] = new THREE.Vector3(mouse.x, mouse.y, 0);
-          // a[3].applyEuler(euler);
-          a[2] = new THREE.Vector3(a[1].x, a[3].y, 0);
-          a[4] = new THREE.Vector3(a[3].x, a[1].y, 0);
-          a[5] = new THREE.Vector3(a[1].x, a[1].y, 0);
-          geometry.vertices.push(a[1], a[2], a[3], a[4], a[5]);
-          var box = new THREE.Line(geometry, material);
-          box.setRotationFromEuler(euler);
-          // box.rotateZ(group_1.rotation._z);
-          // box.rotateY(group_1.rotation._y);
-          // box.rotateX(group_1.rotation._x);
-          for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-            group_2.remove(group_2.children[i])
-          }
-          group_2.add(box);
-          break;
-        default:
-          a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-  
-          // a[1].applyEuler(euler);
-          clickCanvas = 0;
-          break;
-      }
-    }
-    render();
-  }
+//     mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+//     mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
 
-function okregM(e) {
+//     var material = new THREE.LineBasicMaterial({
+//         color: 0x050505
+//     });
+//     var geometry = new THREE.Geometry();
+//     if (!x) {
+//         switch (clickCanvas) {
 
-    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
-    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
+//             case 1:
+//                 a[3] = new THREE.Vector3(mouse.x, mouse.y, 0);
+//                 a[2] = new THREE.Vector3(a[1].x, a[3].y, 0);
+//                 a[4] = new THREE.Vector3(a[3].x, a[1].y, 0);
+//                 a[5] = new THREE.Vector3(a[1].x, a[1].y, 0);
+//                 geometry.vertices.push(a[1], a[2], a[3], a[4], a[5]);
+//                 var box = new THREE.Line(geometry, material);
+//                 box.rotateZ(-group_1.rotation._z);
+//                 box.rotateY(-group_1.rotation._y);
+//                 box.rotateX(-group_1.rotation._x);
+//                 for (var i = 0 + g_2El; i < group_2.children.length; i++) {
+//                     group_2.remove(group_2.children[i])
+//                 }
+//                 group_2.add(box);
+//                 break;
+//             default:
+//                 a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+//                 clickCanvas = 0;
+//                 break;
+//         }
+//     } else {
 
-    switch (clickCanvas) {
-        case 0:
-            break;
-        case 1:
-            var radius,
-                segments = 32,
-                material = new THREE.LineBasicMaterial({
-                    color: 0x050505
-                }),
-                srednica = new THREE.Vector3(mouse.x, mouse.y, 0);
-            srednica.applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
-            radius = srednica.distanceTo(pozycja[1]);
-            geometry = new THREE.CircleGeometry(radius, segments, 0, (Math.PI * 2).toFixed(2)),
-                geometry.vertices.shift();
-            circle = new THREE.Line(geometry, material);
-            circle.rotateZ(-group_1.rotation._z);
-            circle.rotateY(-group_1.rotation._y);
-            circle.rotateX(-group_1.rotation._x);
-            circle.position.set(pozycja[1].x, pozycja[1].y, pozycja[1].z);
-            for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-                group_2.remove(group_2.children[i])
-            }
-            group_2.add(circle);
-            break;
-        default:
-            p[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-            pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
-            clickCanvas = 0;
-            break;
-    }
-    render();
 
-}
+//         var euler = new THREE.Euler(-eulerBlock._x, -eulerBlock._y, -eulerBlock._z, "ZYX");
+//         switch (clickCanvas) {
+
+//             case 1:
+
+//                 a[3] = new THREE.Vector3(mouse.x, mouse.y, 0);
+//                 // a[3].applyEuler(euler);
+//                 a[2] = new THREE.Vector3(a[1].x, a[3].y, 0);
+//                 a[4] = new THREE.Vector3(a[3].x, a[1].y, 0);
+//                 a[5] = new THREE.Vector3(a[1].x, a[1].y, 0);
+//                 geometry.vertices.push(a[1], a[2], a[3], a[4], a[5]);
+//                 var box = new THREE.Line(geometry, material);
+//                 box.setRotationFromEuler(euler);
+//                 // box.rotateZ(group_1.rotation._z);
+//                 // box.rotateY(group_1.rotation._y);
+//                 // box.rotateX(group_1.rotation._x);
+//                 for (var i = 0 + g_2El; i < group_2.children.length; i++) {
+//                     group_2.remove(group_2.children[i])
+//                 }
+//                 group_2.add(box);
+//                 break;
+//             default:
+//                 a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+
+//                 // a[1].applyEuler(euler);
+//                 clickCanvas = 0;
+//                 break;
+//         }
+//     }
+//     render();
+// }
+
+// function okregM(e) {
+
+//     mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+//     mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
+
+//     switch (clickCanvas) {
+//         case 0:
+//             break;
+//         case 1:
+//             var radius,
+//                 segments = 32,
+//                 material = new THREE.LineBasicMaterial({
+//                     color: 0x050505
+//                 }),
+//                 srednica = new THREE.Vector3(mouse.x, mouse.y, 0);
+//             srednica.applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
+//             radius = srednica.distanceTo(pozycja[1]);
+//             geometry = new THREE.CircleGeometry(radius, segments, 0, (Math.PI * 2).toFixed(2)),
+//                 geometry.vertices.shift();
+//             circle = new THREE.Line(geometry, material);
+//             circle.rotateZ(-group_1.rotation._z);
+//             circle.rotateY(-group_1.rotation._y);
+//             circle.rotateX(-group_1.rotation._x);
+//             circle.position.set(pozycja[1].x, pozycja[1].y, pozycja[1].z);
+//             for (var i = 0 + g_2El; i < group_2.children.length; i++) {
+//                 group_2.remove(group_2.children[i])
+//             }
+//             group_2.add(circle);
+//             break;
+//         default:
+//             p[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+//             pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
+//             clickCanvas = 0;
+//             break;
+//     }
+//     render();
+
+// }
 
 function walecM(e) {
 
@@ -1213,9 +1270,9 @@ function isRoot(euler) {
     // group.quaternion.multiplyQuaternions(group.quaternion,euler);
     // group_1.quaternion.multiplyQuaternions(group_1.quaternion,euler);
     // group_2.setRotationFromQuaternion(group.children[7].getWorldQuaternion(new THREE.Quaternion()));
-    group.setRotationFromQuaternion(euler);
-    group_1.setRotationFromQuaternion(euler);
-    group_2.setRotationFromQuaternion(euler);
+    group.setRotationFromEuler(new THREE.Euler(Math.PI * 2, Math.PI * 2, 0, "XYZ"));
+    group_1.setRotationFromEuler(new THREE.Euler(Math.PI * 2, Math.PI * 2, 0, "XYZ"));
+    group_2.setRotationFromEuler(new THREE.Euler(Math.PI * 2, Math.PI * 2, 0, "XYZ"));
     // group.applyQuaternion(euler);
     // group_1.applyQuaternion(euler);
     // var quq= new THREE.Quaternion().setFromEuler(new THREE.Euler(toRadians(90),0,0,"XYZ"));
@@ -1335,36 +1392,36 @@ function raycasterMove() {
             intersects[0].object.material.opacity = "0.25";
             intersects[0].object.geometry.colorsNeedUpdate = true;
             menuScetchOK = false;
-            plane7.material.color.set(0xedeff2);
-            plane8.material.color.set(0xedeff2);
-            plane7.material.opacity = "0.01";
-            plane8.material.opacity = "0.01";
+            // plane7.material.color.set(0xedeff2);
+            // plane8.material.color.set(0xedeff2);
+            plane7.material.opacity = "0";
+            plane8.material.opacity = "0";
         } else if (intersects[0].object.name == "plane7") {
             intersects[0].object.material.color.set(0x272828);
             intersects[0].object.material.opacity = "0.25";
             intersects[0].object.geometry.colorsNeedUpdate = true;
             menuScetchOK = false;
-            plane6.material.color.set(0xedeff2);
-            plane8.material.color.set(0xedeff2);
-            plane6.material.opacity = "0.01";
+            // plane6.material.color.set(0xedeff2);
+            // plane8.material.color.set(0xedeff2);
+            plane6.material.opacity = "0";
             plane8.material.opacity = "0";
         } else if (intersects[0].object.name == "plane8") {
             intersects[0].object.material.color.set(0x272828);
             intersects[0].object.material.opacity = "0.25";
             intersects[0].object.geometry.colorsNeedUpdate = true;
             menuScetchOK = false;
-            plane6.material.color.set(0xedeff2);
-            plane7.material.color.set(0xedeff2);
-            plane6.material.opacity = "0.01";
-            plane7.material.opacity = "0.01";
+            // plane6.material.color.set(0xedeff2);
+            // plane7.material.color.set(0xedeff2);
+            plane6.material.opacity = "0";
+            plane7.material.opacity = "0";
         }
     } else {
         document.getElementById("pLine").innerHTML = "Brak zaznaczonych obiektow.";
         document.getElementById("pLine").style.color = "black";
         // materialP6.color="0xedeff2";
-        plane6.material.color.set(0xedeff2);
-        plane7.material.color.set(0xedeff2);
-        plane8.material.color.set(0xedeff2);
+        // plane6.material.color.set(0xedeff2);
+        // plane7.material.color.set(0xedeff2);
+        // plane8.material.color.set(0xedeff2);
         plane6.material.opacity = "0";
         plane7.material.opacity = "0";
         plane8.material.opacity = "0";
@@ -1388,11 +1445,11 @@ function toRotate(intersects, block) {
         intersects[0].object.name == 'plane6' && block == false) {
         qua.setFromEuler(new THREE.Euler(0, 0, 0));
         if (group_1.quaternion != qua) {
+            group_3.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group_2.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group_1.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             // isRoot(qua);
-
 
         }
 
@@ -1400,23 +1457,27 @@ function toRotate(intersects, block) {
     if (intersects[0].object.name == 'right' && block == false) {
         qua.setFromEuler(new THREE.Euler(0, -Math.PI / 2, 0));
         if (group_1.quaternion != qua) {
+            group_3.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group_2.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group_1.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group.quaternion.set(qua._x, qua._y, qua._z, qua._w);
         }
     }
     if (intersects[0].object.name == 'back' && block == false) {
-        qua.setFromEuler(new THREE.Euler(0, Math.PI, 0));
+        qua.setFromEuler(new THREE.Euler(Math.PI * 2, Math.PI * 3, Math.PI * 2));
         if (group_1.quaternion != qua) {
+            group_3.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group_2.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group_1.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group.quaternion.set(qua._x, qua._y, qua._z, qua._w);
         }
+
     }
     if (intersects[0].object.name == 'left' && block == false ||
         intersects[0].object.name == 'plane7' && block == false) {
         qua.setFromEuler(new THREE.Euler(0, Math.PI / 2, 0));
         if (group_1.quaternion != qua) {
+            group_3.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group_2.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group_1.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group.quaternion.set(qua._x, qua._y, qua._z, qua._w);
@@ -1427,6 +1488,7 @@ function toRotate(intersects, block) {
         intersects[0].object.name == 'plane8' && block == false) {
         qua.setFromEuler(new THREE.Euler(Math.PI / 2, 0, 0));
         if (group_1.quaternion != qua) {
+            group_3.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group_2.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group_1.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group.quaternion.set(qua._x, qua._y, qua._z, qua._w);
@@ -1436,6 +1498,7 @@ function toRotate(intersects, block) {
     if (intersects[0].object.name == 'bottom' && block == false) {
         qua.setFromEuler(new THREE.Euler(-Math.PI / 2, 0, 0));
         if (group_1.quaternion != qua) {
+            group_3.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group_2.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group_1.quaternion.set(qua._x, qua._y, qua._z, qua._w);
             group.quaternion.set(qua._x, qua._y, qua._z, qua._w);
