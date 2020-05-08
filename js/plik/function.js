@@ -56,7 +56,7 @@ document.body.appendChild(container);
 container.setAttribute('id', 'container');
 // container.setAttribute('class','row');
 var scene = new THREE.Scene();
-var camera = new THREE.OrthographicCamera(width / -2, width / 2, height / 2, height / -2, 1, 1000);
+var camera = new THREE.OrthographicCamera(width / -2, width / 2, height / 2, height / -2, 1, 1500);
 var renderer = new THREE.WebGLRenderer({
     alpha: true
 });
@@ -105,15 +105,26 @@ footer.style.position = 'absolute';
 footer.setAttribute('id', 'footer');
 footer.setAttribute('class', 'col-sm-12');
 footer.style.bottom = 0 + 'px';
+footer.style.minWidth="90%";
+footer.style.padding="35px";
 document.body.appendChild(footer);
-$('#footer').append('<div class="col-sm-6" id="footerInput">');
-$('#footerInput').append('<input type="text" class="form-control" id="text1" disabled></br>');
+// $('#footer').append('<div class="col-sm-6" id="footerInput">');
+// $('#footerInput').append('<input type="text" class="form-control" id="text1" disabled></br>');
+// $('#footerInput').append('<input type="text" class="form-control" id="text2"></br>');
+// $('#footer').append('<div id="footerInfo" class="col-sm-3"></div>')
+// $('#footer').append('<div id="footerCopright" class="col-sm-3"></div>');
+// $('#footerInfo').append('<p id="pLine"></p>');
+// $('#footerInfo').append('<p id="pFooter_1"></p>');
+// $('#footerCopright').append('<p id="pFooter"></p>');
+$('#footer').append('<div id="footerInput"></div>');
+$('#footerInput').append('<input type="text" class="form-control" id="text1" disabled ></br>');
 $('#footerInput').append('<input type="text" class="form-control" id="text2"></br>');
-$('#footer').append('<div id="footerInfo" class="col-sm-3"></div>')
-$('#footer').append('<div id="footerCopright" class="col-sm-3"></div>');
-$('#footerInfo').append('<p id="pLine"></p>');
-$('#footerInfo').append('<p id="pFooter_1"></p>');
+$('#footer').append('<div id="footerInfo" class="col-sm-3"><p id="pLine">Brak obiektów</p><p id="pFooter_1"><p id="x">X:</p><p id="y">Y:</p><p id="z">Z:</p></p></div>')
+$('#footer').append('<div id="footerCopright" class="col-sm-3" style="display:inline-block;float:right;"></div>');
+// $('#footerInfo').append('<p id="pLine"></p>');
+// $('#footerInfo').append('<p id="pFooter_1"></p>');
 $('#footerCopright').append('<p id="pFooter"></p>');
+
 /* var controls = new THREE.OrbitControls(camera);
  controls.addEventListener('change', render); // remove when using animation loop
  controls.enableRotate = true;
@@ -192,15 +203,15 @@ var material1 = new THREE.LineBasicMaterial({
 var geometryP4 = new THREE.PlaneGeometry(250, 250, 250);
 var materialP4 = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, side: THREE.DoubleSide, vertexColors: THREE.FaceColors });
 var plane6 = new THREE.Mesh(geometryP4, materialP4);
-plane6.name = "plane6";
+plane6.name = "XY";
 var geometryP5 = new THREE.PlaneGeometry(250, 250, 250);
 var materialP5 = new THREE.MeshPhongMaterial({ transparent: true, opacity: 0, side: THREE.DoubleSide, vertexColors: THREE.FaceColors });
 var plane7 = new THREE.Mesh(geometryP5, materialP5);
-plane7.name = "plane7";
+plane7.name = "YZ";
 var geometryP6 = new THREE.PlaneGeometry(250, 250, 250);
 var materialP6 = new THREE.MeshPhongMaterial({ transparent: true, opacity: 0, side: THREE.DoubleSide, vertexColors: THREE.FaceColors });
 var plane8 = new THREE.Mesh(geometryP6, materialP6);
-plane8.name = "plane8";
+plane8.name = "XZ";
 
 var geometry1 = new THREE.Geometry();
 geometry1.vertices.push(new THREE.Vector3(-20, -20, -20), new THREE.Vector3(20, -20, -20), new THREE.Vector3(20, 20, -20), new THREE.Vector3(-20, 20, -20), new THREE.Vector3(-20, -20, -20), new THREE.Vector3(-20, -20, 20), new THREE.Vector3(-20, 20, 20), new THREE.Vector3(-20, 20, -20), new THREE.Vector3(20, 20, -20), new THREE.Vector3(20, -20, -20), new THREE.Vector3(20, -20, 20), new THREE.Vector3(20, 20, 20), new THREE.Vector3(20, 20, -20), new THREE.Vector3(20, 20, 20), new THREE.Vector3(20, -20, 20), new THREE.Vector3(-20, -20, 20), new THREE.Vector3(-20, 20, 20), new THREE.Vector3(20, 20, 20));
@@ -267,7 +278,7 @@ group_1.add(plane4); //top
 group_1.add(plane5); //bottom
 
 
-camera.position.set(0, 0, 450);
+camera.position.set(0, 0, 800);
 
 
 var pozycja = [new THREE.Vector3()];
@@ -623,6 +634,7 @@ document.getElementById("pushF").onclick = function () {
         document.getElementById("pushF").style.backgroundColor = "red";
         eulerBlock = new THREE.Euler(-group_1.rotation._x,-group_1.rotation._y,-group_1.rotation._z, "ZYX");
         plane9.setRotationFromEuler(new THREE.Euler(eulerBlock._x,eulerBlock._y,eulerBlock._z,"ZYX"));
+        qutOut=group_3.quaternion;
         group_3.add(plane9);
 
     } else {
@@ -763,6 +775,7 @@ function scaleCanvas(e) {
         } else {
             scaleO = 1.6;
         }
+        group_3.scale.set(scale, scale, scale);
         group_2.scale.set(scale, scale, scale);
         group.scale.set(scaleO, scaleO, scaleO);
     } else {
@@ -778,6 +791,7 @@ function scaleCanvas(e) {
         } else {
             scaleO = 1.6;
         }
+        group_3.scale.set(scale, scale, scale);
         group_2.scale.set(scale, scale, scale);
         group.scale.set(scaleO, scaleO, scaleO);
 
@@ -785,24 +799,35 @@ function scaleCanvas(e) {
     var mouse = new THREE.Vector2();
     mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
     mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
-    document.getElementById("pFooter_1").innerHTML =
-        '<p style="color:red">X:'
-        + mouse.x + '<p style="color:blue;">Y:'
-        + mouse.y + '<p style="color:green;">Z:'
-        + group_1.position.z / scale + '</p></p></p>';
+    document.getElementById("x").innerHTML ="X:"+(mouse.x).toFixed(2);
+    document.getElementById("y").innerHTML ="Y:"+(mouse.y).toFixed(2);
+    document.getElementById("z").innerHTML ="Z:"+(group.position.z / scale).toFixed(2);
 }
 
 function mousePosition(e) {
     var mouse = new THREE.Vector2();
     mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
     mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
-    document.getElementById("pFooter_1").innerHTML =
-        '<p style="color:red">X:'
-        + mouse.x + '<p style="color:blue;">Y:'
-        + mouse.y + '<p style="color:green;">Z:'
-        + group_1.position.z / scale + '</p></p></p>';
+    document.getElementById("x").innerHTML ="X:"+(mouse.x).toFixed(2);
+    document.getElementById("y").innerHTML ="Y:"+(mouse.y).toFixed(2);
+    document.getElementById("z").innerHTML ="Z:"+(group.position.z / scale).toFixed(2);
+        
 
 }
+
+function intersectBlockPlane(x, y) {
+    var euler = new THREE.Euler(eulerBlock._x,eulerBlock._y,eulerBlock._z, "ZYX");
+    var m = new THREE.Matrix4().makeRotationFromEuler(euler);
+    var m_i = new THREE.Matrix4().getInverse(m);
+  
+    var p0 = new THREE.Vector3(x, y, 1000).applyEuler(new THREE.Euler(-group_1.rotation._x,-group_1.rotation._y,-group_1.rotation._z,"ZYX")).applyMatrix4(m_i);
+    var p1 = new THREE.Vector3(x, y, -1000).applyEuler(new THREE.Euler(-group_1.rotation._x,-group_1.rotation._y,-group_1.rotation._z,"ZYX")).applyMatrix4(m_i);
+    var line = new THREE.Line3(p0, p1);
+    var plane = new THREE.Plane().setFromCoplanarPoints(
+      new THREE.Vector3(0, 0, 0), new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 1, 0)
+    );
+    return plane.intersectLine(line);
+  }
 
 function linia(e) {
 
@@ -878,69 +903,99 @@ function linia(e) {
     }
 }
 
-// function kwadrat(e) {
+function kwadrat(e) {
 
-//     mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
-//     mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
-//     if (!x) {
-//         switch (clickCanvas) {
-//             case 0:
-//                 a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-//                 break;
-//             default:
-//                 a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-//                 break;
-//         }
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
+    if (!x) {
+      switch (clickCanvas) {
+        case 0:
+          a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          break;
+        default:
+          a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          break;
+      }
+  
+    } else {
+  
+      
+  
+      switch (clickCanvas) {
+        case 0:
+          // a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          a[1] = intersectBlockPlane(mouse.x, mouse.y);
+          // a[1].applyEuler(euler);
+          console.log(a[1]);
+          break;
+        case 1:
+          // console.log("EULER: ");
+          // console.log(euler);
+          break;
+        default:
+          // a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          a[1] = intersectBlockPlane(mouse.x, mouse.y);
+          // a[1].applyEuler(euler);
+          break;
+      }
+  
+    }
+  
+    clickCanvas++;
+    objects.splice(7 + g_2El, objects.length);
+    for (var i = 0 + g_2El; i < group_2.children.length; i++) {
+      objects.push(group_2.children[i]);
+    }
+    g_2El = group_2.children.length;
+  }
 
-//     } else {
 
-//         var euler = new THREE.Euler(-eulerBlock._x, -eulerBlock._y, -eulerBlock._z, "ZYX");
-//         switch (clickCanvas) {
-//             case 0:
-//                 a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-//                 // a[1].applyEuler(euler);
-//                 break;
-//             default:
-//                 a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+function okreg(e) {
 
-//                 // a[1].applyEuler(euler);
-//                 break;
-//         }
-
-//     }
-
-//     clickCanvas++;
-//     objects.splice(7 + g_2El, objects.length);
-//     for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-//         objects.push(group_2.children[i]);
-//     }
-//     g_2El = group_2.children.length;
-// }
-
-
-// function okreg(e) {
-
-//     mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
-//     mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
-
-//     switch (clickCanvas) {
-//         case 0:
-//             pozycja[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-//             pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
-//             break;
-//         default:
-//             pozycja[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-//             pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
-//             break;
-//     }
-//     clickCanvas++;
-//     objects.splice(7 + g_2El, objects.length);
-//     for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-//         objects.push(group_2.children[i]);
-//     }
-//     g_2El = group_2.children.length;
-//     render();
-// }
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
+  
+    if (!x) {
+  
+  
+      switch (clickCanvas) {
+        case 0:
+          pozycja[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
+          break;
+        default:
+          pozycja[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
+          break;
+      }
+  
+  
+  
+    } else {
+  
+      // var euler = euler0();
+      var euler = new THREE.Euler(eulerBlock._x,eulerBlock._y,eulerBlock._z, "ZYX");
+  
+      switch (clickCanvas) {
+        case 0:
+          pozycja[1] = intersectBlockPlane(mouse.x, mouse.y); //new THREE.Vector3(mouse.x, mouse.y, 0);
+  
+          pozycja[1].applyEuler(euler);
+          break;
+        default:
+          pozycja[1] = intersectBlockPlane(mouse.x, mouse.y); //new THREE.Vector3(mouse.x, mouse.y, 0);
+          pozycja[1].applyEuler(euler);
+          break;
+      }
+    }
+    clickCanvas++;
+    objects.splice(7 + g_2El, objects.length);
+    for (var i = 0 + g_2El; i < group_2.children.length; i++) {
+      objects.push(group_2.children[i]);
+    }
+    g_2El = group_2.children.length;
+    render();
+  }
 
 function walec(e) {
     mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
@@ -1039,111 +1094,161 @@ function liniaM(e) {
     }
 }
 
-// function kwadratM(e) {
+function kwadratM(e) {
 
-//     mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
-//     mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
+  
+    var material = new THREE.LineBasicMaterial({
+      color: 0x050505
+    });
+    var geometry = new THREE.Geometry();
+    if (!x) {
+      switch (clickCanvas) {
+  
+        case 1:
+          a[3] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          a[2] = new THREE.Vector3(a[1].x, a[3].y, 0);
+          a[4] = new THREE.Vector3(a[3].x, a[1].y, 0);
+          a[5] = new THREE.Vector3(a[1].x, a[1].y, 0);
+          geometry.vertices.push(a[1], a[2], a[3], a[4], a[5]);
+          var box = new THREE.Line(geometry, material);
+          box.setRotationFromEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
+          // box.rotateZ(-group_1.rotation._z);
+          // box.rotateY(-group_1.rotation._y);
+          // box.rotateX(-group_1.rotation._x);
+          for (var i = 0 + g_2El; i < group_2.children.length; i++) {
+            group_2.remove(group_2.children[i])
+          }
+          group_2.add(box);
+          break;
+        default:
+          a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          clickCanvas = 0;
+          break;
+      }
+    } else {
+  
+      var euler = new THREE.Euler(eulerBlock._x,eulerBlock._y,eulerBlock._z, "ZYX");
+      
+      switch (clickCanvas) {
+  
+        case 1:
+  
+          a[3] = intersectBlockPlane(mouse.x, mouse.y);
+  
+          a[2] = new THREE.Vector3(a[1].x, a[3].y, 0);
+          // 
+          a[4] = new THREE.Vector3(a[3].x, a[1].y, 0);
+          // 
+          a[5] = new THREE.Vector3(a[1].x, a[1].y, 0);
+  
+          for (var i = 2; i < 6; i++) {
+            a[i].applyEuler(euler);
+          }
+  
+          // a[1].applyEuler(euler);
+          // a[2].applyEuler(euler);
+  
+          // a[4].applyEuler(euler);
+          // a[5].applyEuler(euler);
+  
+  
+          geometry.vertices.push(a[1].clone().applyEuler(euler), a[2], a[3], a[4], a[5]);
+          var box = new THREE.Line(geometry, material);
+          // box.setRotationFromEuler(euler);
+          // box.rotateZ(-eulerBlock._z);
+          // box.rotateY(-eulerBlock._y);
+          // box.rotateX(-eulerBlock._x);
+          // box.quaternion.setFromEuler(euler);
+          for (var i = 0 + g_2El; i < group_2.children.length; i++) {
+            group_2.remove(group_2.children[i])
+          }
+          group_2.add(box);
+          break;
+        default:
+          a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          a[1].applyEuler(euler);
+          clickCanvas = 0;
+          break;
+      }
+    }
+    render();
+  }
 
-//     var material = new THREE.LineBasicMaterial({
-//         color: 0x050505
-//     });
-//     var geometry = new THREE.Geometry();
-//     if (!x) {
-//         switch (clickCanvas) {
+  function okregM(e) {
 
-//             case 1:
-//                 a[3] = new THREE.Vector3(mouse.x, mouse.y, 0);
-//                 a[2] = new THREE.Vector3(a[1].x, a[3].y, 0);
-//                 a[4] = new THREE.Vector3(a[3].x, a[1].y, 0);
-//                 a[5] = new THREE.Vector3(a[1].x, a[1].y, 0);
-//                 geometry.vertices.push(a[1], a[2], a[3], a[4], a[5]);
-//                 var box = new THREE.Line(geometry, material);
-//                 box.rotateZ(-group_1.rotation._z);
-//                 box.rotateY(-group_1.rotation._y);
-//                 box.rotateX(-group_1.rotation._x);
-//                 for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-//                     group_2.remove(group_2.children[i])
-//                 }
-//                 group_2.add(box);
-//                 break;
-//             default:
-//                 a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-//                 clickCanvas = 0;
-//                 break;
-//         }
-//     } else {
-
-
-//         var euler = new THREE.Euler(-eulerBlock._x, -eulerBlock._y, -eulerBlock._z, "ZYX");
-//         switch (clickCanvas) {
-
-//             case 1:
-
-//                 a[3] = new THREE.Vector3(mouse.x, mouse.y, 0);
-//                 // a[3].applyEuler(euler);
-//                 a[2] = new THREE.Vector3(a[1].x, a[3].y, 0);
-//                 a[4] = new THREE.Vector3(a[3].x, a[1].y, 0);
-//                 a[5] = new THREE.Vector3(a[1].x, a[1].y, 0);
-//                 geometry.vertices.push(a[1], a[2], a[3], a[4], a[5]);
-//                 var box = new THREE.Line(geometry, material);
-//                 box.setRotationFromEuler(euler);
-//                 // box.rotateZ(group_1.rotation._z);
-//                 // box.rotateY(group_1.rotation._y);
-//                 // box.rotateX(group_1.rotation._x);
-//                 for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-//                     group_2.remove(group_2.children[i])
-//                 }
-//                 group_2.add(box);
-//                 break;
-//             default:
-//                 a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-
-//                 // a[1].applyEuler(euler);
-//                 clickCanvas = 0;
-//                 break;
-//         }
-//     }
-//     render();
-// }
-
-// function okregM(e) {
-
-//     mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
-//     mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
-
-//     switch (clickCanvas) {
-//         case 0:
-//             break;
-//         case 1:
-//             var radius,
-//                 segments = 32,
-//                 material = new THREE.LineBasicMaterial({
-//                     color: 0x050505
-//                 }),
-//                 srednica = new THREE.Vector3(mouse.x, mouse.y, 0);
-//             srednica.applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
-//             radius = srednica.distanceTo(pozycja[1]);
-//             geometry = new THREE.CircleGeometry(radius, segments, 0, (Math.PI * 2).toFixed(2)),
-//                 geometry.vertices.shift();
-//             circle = new THREE.Line(geometry, material);
-//             circle.rotateZ(-group_1.rotation._z);
-//             circle.rotateY(-group_1.rotation._y);
-//             circle.rotateX(-group_1.rotation._x);
-//             circle.position.set(pozycja[1].x, pozycja[1].y, pozycja[1].z);
-//             for (var i = 0 + g_2El; i < group_2.children.length; i++) {
-//                 group_2.remove(group_2.children[i])
-//             }
-//             group_2.add(circle);
-//             break;
-//         default:
-//             p[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-//             pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
-//             clickCanvas = 0;
-//             break;
-//     }
-//     render();
-
-// }
+    mouse.x = (e.clientX - document.getElementById("can").width / 2) / scale;
+    mouse.y = (-(e.clientY - document.getElementById("can").height / 2)) / scale;
+  
+    if (!x) {
+      switch (clickCanvas) {
+        case 0:
+          break;
+        case 1:
+          var radius,
+            segments = 32,
+            material = new THREE.LineBasicMaterial({
+              color: 0x050505
+            }),
+            srednica = new THREE.Vector3(mouse.x, mouse.y, 0);
+          srednica.applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
+          radius = srednica.distanceTo(pozycja[1]);
+          geometry = new THREE.CircleGeometry(radius, segments, 0, (Math.PI * 2).toFixed(2)),
+            geometry.vertices.shift();
+          circle = new THREE.Line(geometry, material);
+          circle.rotateZ(-group_1.rotation._z);
+          circle.rotateY(-group_1.rotation._y);
+          circle.rotateX(-group_1.rotation._x);
+          circle.position.set(pozycja[1].x, pozycja[1].y, pozycja[1].z);
+          for (var i = 0 + g_2El; i < group_2.children.length; i++) {
+            group_2.remove(group_2.children[i])
+          }
+          group_2.add(circle);
+          break;
+        default:
+          p[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          pozycja[1].applyEuler(new THREE.Euler(-group_1.rotation._x, -group_1.rotation._y, -group_1.rotation._z, "ZYX"));
+          clickCanvas = 0;
+          break;
+      }
+    } else {
+  
+  
+      var euler = new THREE.Euler(eulerBlock._x,eulerBlock._y,eulerBlock._z, "ZYX");
+      // var euler = euler0();
+      switch (clickCanvas) {
+        case 0:
+          break;
+        case 1:
+          var radius,
+            segments = 32,
+            material = new THREE.LineBasicMaterial({
+              color: 0x050505
+            }),
+            srednica = intersectBlockPlane(mouse.x, mouse.y); // new THREE.Vector3(mouse.x, mouse.y, 0);
+          srednica.applyEuler(euler);
+          radius = srednica.distanceTo(pozycja[1]);
+          geometry = new THREE.CircleGeometry(radius, segments, 0, (Math.PI * 2).toFixed(2)),
+            geometry.vertices.shift();
+          circle = new THREE.Line(geometry, material);
+          circle.setRotationFromEuler(euler);
+          circle.position.set(pozycja[1].x, pozycja[1].y, pozycja[1].z);
+          for (var i = 0 + g_2El; i < group_2.children.length; i++) {
+            group_2.remove(group_2.children[i])
+          }
+          group_2.add(circle);
+          break;
+        default:
+          p[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+          pozycja[1].applyEuler(euler);
+          clickCanvas = 0;
+          break;
+      }
+  
+    }
+    render();
+  }
 
 function walecM(e) {
 
@@ -1358,7 +1463,7 @@ function raycasterClik() {
         document.getElementById("pLine").innerHTML = 'Objekt o nazwie: ' + intersects[0].object.name;
         document.getElementById("pLine").style.color = "red";
     } else {
-        document.getElementById("pLine").innerHTML = "Brak zaznaczonych obiektow." + mouse.x;
+        document.getElementById("pLine").innerHTML = "Brak zaznaczonych obiektow." ;
         document.getElementById("pLine").style.color = "black";
     }
 }
@@ -1373,7 +1478,7 @@ function raycasterMove() {
     raycaster.linePrecision = 3;
     var intersects = raycaster.intersectObjects(objects);
     if (intersects.length > 0) {
-
+        
         document.getElementById("pLine").innerHTML = 'Objekt o nazwie: ' + intersects[0].object.name;
         document.getElementById("pLine").style.color = "red";
         // document.onKeyDown = function (e) {
@@ -1387,7 +1492,7 @@ function raycasterMove() {
         //         };
         //     };
         // };
-        if (intersects[0].object.name == "plane6") {
+        if (intersects[0].object.name == "XY") {
             intersects[0].object.material.color.set(0x272828);
             intersects[0].object.material.opacity = "0.25";
             intersects[0].object.geometry.colorsNeedUpdate = true;
@@ -1396,7 +1501,7 @@ function raycasterMove() {
             // plane8.material.color.set(0xedeff2);
             plane7.material.opacity = "0";
             plane8.material.opacity = "0";
-        } else if (intersects[0].object.name == "plane7") {
+        } else if (intersects[0].object.name == "YZ") {
             intersects[0].object.material.color.set(0x272828);
             intersects[0].object.material.opacity = "0.25";
             intersects[0].object.geometry.colorsNeedUpdate = true;
@@ -1405,7 +1510,7 @@ function raycasterMove() {
             // plane8.material.color.set(0xedeff2);
             plane6.material.opacity = "0";
             plane8.material.opacity = "0";
-        } else if (intersects[0].object.name == "plane8") {
+        } else if (intersects[0].object.name == "XZ") {
             intersects[0].object.material.color.set(0x272828);
             intersects[0].object.material.opacity = "0.25";
             intersects[0].object.geometry.colorsNeedUpdate = true;
@@ -1442,7 +1547,7 @@ animate();
 function toRotate(intersects, block) {
     var qua = new THREE.Quaternion();
     if (intersects[0].object.name == 'front' && block == false ||
-        intersects[0].object.name == 'plane6' && block == false) {
+        intersects[0].object.name == 'XY' && block == false) {
         qua.setFromEuler(new THREE.Euler(0, 0, 0));
         if (group_1.quaternion != qua) {
             group_3.quaternion.set(qua._x, qua._y, qua._z, qua._w);
@@ -1474,7 +1579,7 @@ function toRotate(intersects, block) {
 
     }
     if (intersects[0].object.name == 'left' && block == false ||
-        intersects[0].object.name == 'plane7' && block == false) {
+        intersects[0].object.name == 'YZ' && block == false) {
         qua.setFromEuler(new THREE.Euler(0, Math.PI / 2, 0));
         if (group_1.quaternion != qua) {
             group_3.quaternion.set(qua._x, qua._y, qua._z, qua._w);
@@ -1485,7 +1590,7 @@ function toRotate(intersects, block) {
         }
     }
     if (intersects[0].object.name == 'top' && block == false ||
-        intersects[0].object.name == 'plane8' && block == false) {
+        intersects[0].object.name == 'XZ' && block == false) {
         qua.setFromEuler(new THREE.Euler(Math.PI / 2, 0, 0));
         if (group_1.quaternion != qua) {
             group_3.quaternion.set(qua._x, qua._y, qua._z, qua._w);
@@ -1516,7 +1621,7 @@ function toDegrees(angle) {
 }
 $(function () {
     var date = new Date();
-    $('#pFooter').html('\251 ' + date.getFullYear() + ' by EmSoft wszelkie prawa zastrzezone <br/><a href="http://www.emsoft.net.pl"><span style="color:#3016dd;"> www.emsoft.net.pl</span></a> <h4 style="color:red"> Strona w przygotowaniu</h4>');
+    $('#pFooter').html('\251 ' + date.getFullYear() + ' by EmSoft wszelkie prawa zastrzezone <br/><a href="http://www.emsoft.net.pl" target="_blank"><span style="color:#3016dd;"> www.emsoft.net.pl</span></a> <h4 style="color:red"> Strona w przygotowaniu</h4>');
 });
 $('#text1').val('Zablokuj płaszczyżnę do kreślenia');
 

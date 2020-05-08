@@ -23,15 +23,17 @@ function kwadrat(e) {
       case 0:
         a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
         a[1].applyEuler(euler);
-        console.log(a[1]);
+        // a[1].applyQuaternion(euler);
+        // console.log(a[1]);
         break;
       case 1:
         // console.log("EULER: ");
         // console.log(euler);
         break;
       default:
-        a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-        a[1].applyEuler(euler);
+        // a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+        // a[1].applyEuler(euler);
+        // a[1].applyQuaternion(euler);
         break;
     }
 
@@ -89,22 +91,28 @@ function kwadratM(e) {
 
         a[3] = new THREE.Vector3(mouse.x, mouse.y, 0);
         a[3].applyEuler(euler);
-        a[2] = new THREE.Vector3(a[1].x, a[3].y, 0);
+        // a[3].applyQuaternion(euler);
+        a[2] = new THREE.Vector3(a[1].x, a[3].y, a[1].z);
         // 
-        a[4] = new THREE.Vector3(a[3].x, a[1].y, 0);
+        a[4] = new THREE.Vector3(a[3].x, a[1].y,a[3].z );
         // 
-        a[5] = new THREE.Vector3(a[1].x, a[1].y, 0);
-
+        a[5] = new THREE.Vector3(a[1].x, a[1].y, a[1].z);
         // a[1].applyEuler(euler);
+       
         // a[2].applyEuler(euler);
 
         // a[4].applyEuler(euler);
         // a[5].applyEuler(euler);
 
 
-        geometry.vertices.push(a[1], a[2], a[3], a[4], a[5]);
+        geometry.vertices.push(a[1]);
+        geometry.vertices.push(a[2]);
+        geometry.vertices.push(a[3]);
+        geometry.vertices.push(a[4]);
+        geometry.vertices.push(a[1]);
+
         var box = new THREE.Line(geometry, material);
-        // box.setRotationFromEuler(euler);
+        // box.setRotationFromEuler(new THREE.Euler(euler._x,euler._y,euler._z,"XYZ"));
         // box.rotateZ(-eulerBlock._z);
         // box.rotateY(-eulerBlock._y);
         // box.rotateX(-eulerBlock._x);
@@ -115,8 +123,9 @@ function kwadratM(e) {
         group_2.add(box);
         break;
       default:
-        a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
-        a[1].applyEuler(euler);
+        // a[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
+        // a[1].applyEuler(euler);
+        // a[1].applyQuaternion(euler);
         clickCanvas = 0;
         break;
     }
@@ -135,14 +144,16 @@ function kwadratM(e) {
 
 function euler0() {
 
-  // var e=  new THREE.Euler(Math.PI*2-group_1.rotation._x+eulerBlock._x+toRadians(30),Math.PI*2-group_1.rotation._y+eulerBlock._y+toRadians(-30),Math.PI*2-group_1.rotation._z+eulerBlock._z,"ZYX");
-  // var e = new THREE.Euler(-eulerBlock._x+group_1.rotation._x,-eulerBlock._y+group_1.rotation._y,-eulerBlock._z+group_1.rotation._z, "ZYX");
-  var e = new THREE.Euler(
-    -group_1.rotation._x,
-    -group_1.rotation._y,
-    -group_1.rotation._z, "ZYX");
+  // var e=  new THREE.Euler(group_1.rotation._x-eulerBlock._x,group_1.rotation._y-eulerBlock._y,group_1.rotation._z-eulerBlock._z,"ZYX");
+  // var e = new THREE.Euler(-group_1.rotation._x + eulerBlock._x, -group_1.rotation._y + eulerBlock._y, -group_1.rotation._z + eulerBlock._z, "ZYX");
+  // var e = new THREE.Euler(eulerBlock._x-group_1.rotation._x,eulerBlock._y-group_1.rotation._y,eulerBlock._z-group_1.rotation._z, "ZYX");
+  // var e = new THREE.Euler(
+  //   group_3.rotation._x,
+  //   group_3.rotation._y,
+  //   group_3.rotation._z, "XYZ");
+  var e = new THREE.Euler(0-group_1.rotation._x,0-group_1.rotation._y,0-group_1.rotation._z,"XYZ");
   // var e = eulerBlock;
-  // var e= new THREE.Euler(eulerBlock._x,eulerBlock._y,eulerBlock._z,"ZYX")
+  // var e= new THREE.Euler(eulerBlock._x,eulerBlock._y,eulerBlock._z,"ZYX");
   return e;
 }
 function euler1() {
@@ -197,6 +208,7 @@ function okreg(e) {
       case 0:
         pozycja[1] = new THREE.Vector3(mouse.x, mouse.y, 0);
         pozycja[1].applyEuler(euler);
+
         break;
       default:
         pozycja[1] = new THREE.Vector3(mouse.x, mouse.y, 0);

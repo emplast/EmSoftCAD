@@ -29,8 +29,15 @@
 }
 #pFooter{
     text-align: center;
-    font-size: 10px;
+    font-size: 15px;
 }
 #footer{
     margin-top:100%;
 }
+#text1,#text2{font-size: 15px;height: 30px;min-width: 100%;border-radius: 5px;margin: 3px;}
+#footerInfo{margin-left: 15px;font-size: 12px;width: 150px;height:72px;padding: 15px;display:inline-block;}
+#footerInput{padding: 15px;display:inline-block;min-width:35vw;}
+#pFooter_1{padding: 5px;}
+#x{color: red;}
+#y{color: blue;}
+#z{color: green;}
